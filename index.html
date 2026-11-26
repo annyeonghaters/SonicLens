@@ -273,14 +273,14 @@
 
         .segmented-nav {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 6px;
             padding: 4px;
             border-radius: 16px;
             background: var(--bg-input);
             border: 1px solid var(--border-subtle);
             width: 100%;
-            max-width: 540px;
+            max-width: 420px;
             margin: 0 auto;
         }
 
@@ -1420,6 +1420,126 @@
         }
 
         /* =========================================================
+           8D. SLIDE-OUT HAMBURGER NAVIGATION DRAWER
+           ========================================================= */
+        .drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 950;
+            background: rgba(5, 7, 12, 0.76);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .drawer-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(320px, 86vw);
+            background: var(--bg-surface);
+            border-left: 1px solid var(--border-strong);
+            box-shadow: -16px 0 48px rgba(0, 0, 0, 0.65);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 960;
+        }
+
+        .drawer-backdrop.open .drawer-panel {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .drawer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 14px 12px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            width: 100%;
+            min-height: 46px;
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: left;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .drawer-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .drawer-item.active {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(167, 139, 250, 0.16));
+            border-color: var(--cyan-border);
+            color: #ffffff;
+        }
+
+        .drawer-item-left {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .drawer-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 6px 4px;
+        }
+
+        .checklist-list {
+            margin: 0;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.84rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .checklist-list code {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: #cffafe;
+            background: var(--bg-input);
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        /* =========================================================
            9. RESPONSIVE BREAKPOINTS (MOBILE-FIRST SAFETY)
            ========================================================= */
         @media (max-width: 768px) {
@@ -1490,10 +1610,11 @@
                     </svg>
                     <span>Install</span>
                 </button>
-                <button type="button" id="btn-open-settings" class="icon-btn" title="API Key &amp; Model Settings" aria-label="API Key Settings">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                <button type="button" id="btn-open-menu" class="icon-btn" title="Open Menu" aria-label="Open Navigation Menu" aria-controls="nav-drawer" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                     <span id="settings-key-dot" class="key-dot is-hidden" title="Custom API Key Saved"></span>
                 </button>
@@ -1502,17 +1623,13 @@
     </header>
 
     <!-- =========================================================
-         3-COLUMN SEGMENTED NAVIGATION BAR
+         2-TAB QUICK-SWITCH BAR (ANALYZE & GENRES)
          ========================================================= -->
-    <nav class="nav-bar-wrap" aria-label="Main navigation">
+    <nav class="nav-bar-wrap" aria-label="Primary workspaces">
         <div class="nav-bar-inner">
             <div class="segmented-nav">
                 <button type="button" id="tab-btn-analyze" class="nav-tab active" data-tab="analyze">
                     <span>Analyze</span>
-                </button>
-                <button type="button" id="tab-btn-history" class="nav-tab" data-tab="history">
-                    <span>History</span>
-                    <span id="badge-history-count" class="nav-badge">0</span>
                 </button>
                 <button type="button" id="tab-btn-genres" class="nav-tab" data-tab="genres">
                     <span>Genres</span>
@@ -1521,6 +1638,75 @@
             </div>
         </div>
     </nav>
+
+    <!-- =========================================================
+         SLIDE-OUT HAMBURGER NAVIGATION DRAWER
+         ========================================================= -->
+    <div id="nav-drawer-backdrop" class="drawer-backdrop" aria-hidden="true">
+        <aside id="nav-drawer" class="drawer-panel" role="dialog" aria-modal="true" aria-label="Navigation Menu">
+            <div class="drawer-header">
+                <div class="brand">
+                    <div class="brand-icon" style="width:30px; height:30px; border-radius:9px;" aria-hidden="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                    </div>
+                    <strong style="font-size:0.96rem;">SonicLens Menu</strong>
+                </div>
+                <button type="button" id="btn-close-menu" class="icon-btn" style="width:36px; height:36px;" aria-label="Close Menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="drawer-list">
+                <button type="button" class="drawer-item active" data-drawer-view="analyze">
+                    <span class="drawer-item-left">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        <span>Analyze</span>
+                    </span>
+                </button>
+
+                <button type="button" class="drawer-item" data-drawer-view="genres">
+                    <span class="drawer-item-left">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        <span>Genre Directory</span>
+                    </span>
+                    <span id="drawer-badge-genres" class="nav-badge">0/0</span>
+                </button>
+
+                <button type="button" class="drawer-item" data-drawer-view="history">
+                    <span class="drawer-item-left">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>History</span>
+                    </span>
+                    <span id="drawer-badge-history" class="nav-badge">0</span>
+                </button>
+
+                <button type="button" class="drawer-item" data-drawer-view="pwa">
+                    <span class="drawer-item-left">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                        <span>PWA &amp; Offline Setup</span>
+                    </span>
+                    <span id="drawer-badge-pwa" class="nav-badge">Setup</span>
+                </button>
+
+                <div class="drawer-divider"></div>
+
+                <button type="button" id="btn-drawer-settings" class="drawer-item">
+                    <span class="drawer-item-left">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        <span>Settings</span>
+                    </span>
+                    <span id="drawer-key-badge" class="nav-badge is-hidden" style="color:var(--emerald);">Key Set</span>
+                </button>
+            </div>
+        </aside>
+    </div>
 
     <!-- =========================================================
          MAIN CONTENT (STRICTLY ISOLATED VIEW PANELS)
@@ -1734,6 +1920,49 @@
                             </div>
                             <span class="chip chip-emerald">Instant Local Signal</span>
                         </div>
+
+                        <div class="grid-4">
+                            <div class="stat-box">
+                                <span class="stat-label">Est. Tempo</span>
+                                <span id="dsp-bpm" class="stat-value" style="color:var(--cyan);">--</span>
+                                <span class="stat-sub">BPM (70–185)</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Brightness</span>
+                                <span id="dsp-centroid" class="stat-value" style="color:var(--violet);">--</span>
+                                <span id="dsp-brightness-label" class="stat-sub">Spectral Centroid</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">RMS Energy</span>
+                                <span id="dsp-energy" class="stat-value" style="color:var(--emerald);">--</span>
+                                <span id="dsp-rms-db" class="stat-sub">-- dBFS</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Percussiveness</span>
+                                <span id="dsp-percussiveness" class="stat-value" style="color:var(--amber);">--</span>
+                                <span class="stat-sub">Zero-Crossing Rate</span>
+                            </div>
+                        </div>
+
+                        <div class="card-subtle stack-md" style="gap:8px;">
+                            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; font-size:0.78rem; font-family:var(--font-mono);">
+                                <span style="color:#c4b5fd;">Bass (&lt;250Hz): <strong id="dsp-bass-pct">0%</strong></span>
+                                <span style="color:#67e8f9;">Mid (250–2.5kHz): <strong id="dsp-mid-pct">0%</strong></span>
+                                <span style="color:#6ee7b7;">Treble (&gt;2.5kHz): <strong id="dsp-treble-pct">0%</strong></span>
+                            </div>
+                            <div class="freq-bar">
+                                <div id="dsp-bar-bass" class="freq-bass" style="width:33%;"></div>
+                                <div id="dsp-bar-mid" class="freq-mid" style="width:34%;"></div>
+                                <div id="dsp-bar-treble" class="freq-treble" style="width:33%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="card-subtle stack-md" style="gap:8px;">
+                            <div class="stat-label">Estimated Rhythmic &amp; Timbral Profile</div>
+                            <p id="dsp-profile-text" style="margin:0; font-size:0.84rem; color:var(--text-secondary);"></p>
+                            <div id="dsp-profile-tags" class="chip-list"></div>
+                        </div>
+                    </div>
 
                     <!-- GRACEFUL OFFLINE AI NOTICE CARD -->
                     <div id="offline-ai-card" class="offline-ai-card is-hidden">
@@ -2090,6 +2319,70 @@
             </div>
         </section>
 
+        <!-- =====================================================
+             VIEW 4: PWA & OFFLINE SETUP (GITHUB PAGES)
+             ===================================================== -->
+        <section id="view-pwa" class="view-panel">
+            <div class="stack-lg">
+                <div style="display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:10px;">
+                    <div>
+                        <h2 class="section-title" style="font-size:1.25rem;">PWA &amp; Offline Setup</h2>
+                        <p class="section-subtitle">Host SonicLens on GitHub Pages and install it as a standalone Android app with offline support.</p>
+                    </div>
+                    <span id="pwa-ready-badge" class="chip chip-cyan">Setup Kit</span>
+                </div>
+
+                <!-- Live Diagnostics -->
+                <div class="card stack-md">
+                    <h3 class="section-title">Live PWA Diagnostics</h3>
+                    <div class="pwa-diag-grid">
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">HTTPS</span>
+                            <span id="pwa-diag-https" class="pwa-diag-value">Checking...</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Manifest</span>
+                            <span id="pwa-diag-manifest" class="pwa-diag-value">Checking...</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Service Worker</span>
+                            <span id="pwa-diag-sw" class="pwa-diag-value">Not Hosted Yet</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Display Mode</span>
+                            <span id="pwa-diag-display" class="pwa-diag-value">Browser</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 One-Click Downloadable PWA Files -->
+                <div class="card stack-md">
+                    <div>
+                        <h3 class="section-title">Download PWA Companion Files</h3>
+                        <p class="section-subtitle">Generated directly in your browser. Upload these 4 files alongside <code>index.html</code> in your GitHub repo root.</p>
+                    </div>
+                    <div class="pwa-download-grid">
+                        <button type="button" id="btn-dl-manifest" class="btn btn-secondary btn-sm">Download manifest.webmanifest</button>
+                        <button type="button" id="btn-dl-sw" class="btn btn-secondary btn-sm">Download sw.js</button>
+                        <button type="button" id="btn-dl-icon-192" class="btn btn-secondary btn-sm">Download icon-192.png</button>
+                        <button type="button" id="btn-dl-icon-512" class="btn btn-secondary btn-sm">Download icon-512.png</button>
+                    </div>
+                </div>
+
+                <!-- Compact GitHub Pages Checklist -->
+                <div class="card stack-md">
+                    <h3 class="section-title">How to Host on GitHub Pages</h3>
+                    <ol class="checklist-list">
+                        <li>Rename <code>sonic_lens.html</code> to <code>index.html</code>.</li>
+                        <li>Download all 4 companion files above (<code>manifest.webmanifest</code>, <code>sw.js</code>, <code>icon-192.png</code>, and <code>icon-512.png</code>).</li>
+                        <li>Upload <code>index.html</code> and the 4 files together into the root folder of your public GitHub repository and commit.</li>
+                        <li>In your repo, go to <strong>Settings &rarr; Pages</strong>, set Branch to <code>main</code> (<code>/ (root)</code>), and save.</li>
+                        <li>Open your live <code>https://username.github.io/repo/</code> URL in Android Chrome and tap <strong>Install</strong> in the header (or Chrome's <strong>&#8942; &rarr; Add to Home screen</strong>).</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- =========================================================
@@ -2146,44 +2439,6 @@
                         <button type="button" id="btn-clear-learning" class="btn btn-danger btn-sm">Clear Learning Memory</button>
                     </div>
                 </div>
-
-                <!-- PWA & OFFLINE SETUP (GITHUB PAGES) SECTION -->
-                <div style="padding-top:14px; border-top:1px solid var(--border-subtle);" class="stack-md">
-                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                        <h4 class="section-title" style="font-size:0.94rem;">PWA &amp; Offline Setup (GitHub Pages)</h4>
-                        <span id="pwa-ready-badge" class="chip chip-cyan" style="font-size:0.68rem;">Web App</span>
-                    </div>
-
-                    <div class="pwa-diag-grid">
-                        <div class="pwa-diag-pill">
-                            <span class="pwa-diag-label">HTTPS</span>
-                            <span id="pwa-diag-https" class="pwa-diag-value">Checking...</span>
-                        </div>
-                        <div class="pwa-diag-pill">
-                            <span class="pwa-diag-label">Manifest</span>
-                            <span id="pwa-diag-manifest" class="pwa-diag-value">Checking...</span>
-                        </div>
-                        <div class="pwa-diag-pill">
-                            <span class="pwa-diag-label">Service Worker</span>
-                            <span id="pwa-diag-sw" class="pwa-diag-value">Not Hosted Yet</span>
-                        </div>
-                        <div class="pwa-diag-pill">
-                            <span class="pwa-diag-label">Display Mode</span>
-                            <span id="pwa-diag-display" class="pwa-diag-value">Browser</span>
-                        </div>
-                    </div>
-
-                    <div class="pwa-download-grid">
-                        <button type="button" id="btn-dl-manifest" class="btn btn-secondary btn-sm">Download manifest.webmanifest</button>
-                        <button type="button" id="btn-dl-sw" class="btn btn-secondary btn-sm">Download sw.js</button>
-                        <button type="button" id="btn-dl-icon-192" class="btn btn-secondary btn-sm">Download icon-192.png</button>
-                        <button type="button" id="btn-dl-icon-512" class="btn btn-secondary btn-sm">Download icon-512.png</button>
-                    </div>
-
-                    <p class="stat-sub" style="margin:0; line-height:1.45; color:var(--text-secondary);">
-                        Upload <code>index.html</code>, <code>manifest.webmanifest</code>, <code>sw.js</code>, <code>icon-192.png</code>, and <code>icon-512.png</code> to your GitHub repo root for full Android WebAPK installation and offline loading.
-                    </p>
-                </div>
             </div>
         </div>
     </div>
@@ -2215,620 +2470,76 @@
         'use strict';
 
         // =====================================================
-        // 1. CONSTANTS & CANONICAL PURE-MUSICAL GENRE TAXONOMY
+        // 4. STRICT TAB, HAMBURGER DRAWER & MODAL NAVIGATION
         // =====================================================
-        const STORAGE_KEY_API = 'soniclens_gemini_api_key';
-        const STORAGE_KEY_MODEL = 'soniclens_gemini_model';
-        const STORAGE_KEY_HISTORY = 'soniclens_history_v1';
-        const STORAGE_KEY_LEARNING = 'soniclens_learning_v1';
+        const navDrawerBackdrop = document.getElementById('nav-drawer-backdrop');
+        const btnOpenMenu = document.getElementById('btn-open-menu');
+        const btnCloseMenu = document.getElementById('btn-close-menu');
+        const btnDrawerSettings = document.getElementById('btn-drawer-settings');
+        const viewPwaEl = document.getElementById('view-pwa');
 
-        const MODEL_FALLBACK_CHAIN = [
-            'gemini-3.5-flash-lite',
-            'gemini-3.8-flash',
-            'gemini-3.6-flash'
-        ];
-
-        const VALID_MODEL_OPTIONS = new Set(['auto', ...MODEL_FALLBACK_CHAIN]);
-
-        // Strictly prohibited regional/language/industry umbrella tags
-        const BANNED_GENRE_REGEX = /\b(k-?pop|korean\s*pop|j-?pop|japanese\s*pop|c-?pop|chinese\s*pop|mandopop|cantopop|p-?pop|t-?pop|v-?pop)\b/i;
-
-        // 157 canonical pure-musical genres across 11 categories (134 granular EDM subgenres)
-        const GENRE_TAXONOMY = [
-            // 1. House & Disco-House (26)
-            { name: 'Deep House', category: 'House & Disco-House', isEdm: true, bpm: '118-124 BPM', cue: 'Warm four-on-the-floor pulse, lush minor 7th/9th chords, and smooth subby basslines.' },
-            { name: 'Tech House', category: 'House & Disco-House', isEdm: true, bpm: '124-130 BPM', cue: 'Punchy stripped-back kick, rolling percussive hi-hat groove, and minimal vocal stabs.' },
-            { name: 'Progressive House', category: 'House & Disco-House', isEdm: true, bpm: '124-130 BPM', cue: 'Euphoric long builds, layered melodic synth pads, and anthemic chord progressions.' },
-            { name: 'Electro House', category: 'House & Disco-House', isEdm: true, bpm: '126-132 BPM', cue: 'Heavy distorted buzzsaw basslines, gritty synth riffs, and big club kick punch.' },
-            { name: 'Big Room House', category: 'House & Disco-House', isEdm: true, bpm: '126-130 BPM', cue: 'Arena-sized pitched sub-kicks, minimalist booming drops, and massive festival risers.' },
-            { name: 'Future House', category: 'House & Disco-House', isEdm: true, bpm: '124-128 BPM', cue: 'Metallic, bouncy FM synth bass leads paired with crisp four-on-the-floor club drums.' },
-            { name: 'Bass House', category: 'House & Disco-House', isEdm: true, bpm: '125-130 BPM', cue: 'Aggressive wobbling mid-range bass drops over driving, high-energy house beats.' },
-            { name: 'Slap House', category: 'House & Disco-House', isEdm: true, bpm: '120-126 BPM', cue: 'Punchy percussive plucked sub-bass hits backing moody minor-key pop vocals.' },
-            { name: 'Stutter House', category: 'House & Disco-House', isEdm: true, bpm: '122-128 BPM', cue: 'Rapid LFO-gated stuttering synth chords and chopped emotive vocals over a clean house groove.' },
-            { name: 'Tropical House', category: 'House & Disco-House', isEdm: true, bpm: '100-115 BPM', cue: 'Breezy laid-back groove with marimba, pan-flute leads, and sunny pluck synths.' },
-            { name: 'Acid House', category: 'House & Disco-House', isEdm: true, bpm: '120-128 BPM', cue: 'Squelchy resonant TB-303 synth basslines over classic TR-808/909 drum machines.' },
-            { name: 'French House', category: 'House & Disco-House', isEdm: true, bpm: '120-128 BPM', cue: 'Phaser-filtered disco sample loops, heavy sidechain pumping, and funky bass grooves.' },
-            { name: 'Nu-Disco', category: 'House & Disco-House', isEdm: true, bpm: '115-124 BPM', cue: 'Polished modern disco groove with slap bass, funky rhythm guitar, and bright analog synths.' },
-            { name: 'Funky House', category: 'House & Disco-House', isEdm: true, bpm: '124-128 BPM', cue: 'Upbeat groovy basslines, brass/string disco samples, and soulful club hooks.' },
-            { name: 'Soulful House', category: 'House & Disco-House', isEdm: true, bpm: '120-125 BPM', cue: 'Expressive gospel/R&B vocals, warm Rhodes electric piano, and organic percussion.' },
-            { name: 'Piano House', category: 'House & Disco-House', isEdm: true, bpm: '122-128 BPM', cue: 'Uplifting staccato M1 house piano chords driving an energetic four-on-the-floor beat.' },
-            { name: 'Garage House', category: 'House & Disco-House', isEdm: true, bpm: '122-128 BPM', cue: 'Swung New York/NJ club groove with diva vocals, bouncy organ bass, and crisp claps.' },
-            { name: 'Afro House', category: 'House & Disco-House', isEdm: true, bpm: '118-124 BPM', cue: 'Hypnotic polyrhythmic shakers, conga/djembe percussion, and deep rolling sub-bass.' },
-            { name: 'Amapiano', category: 'House & Disco-House', isEdm: true, bpm: '110-116 BPM', cue: 'Signature percussive log-drum basslines, airy jazz piano chords, and steady shaker grooves.' },
-            { name: 'Melodic House', category: 'House & Disco-House', isEdm: true, bpm: '120-125 BPM', cue: 'Emotive arpeggiated synths, atmospheric pads, and steady hypnotic club percussion.' },
-            { name: 'Organic House', category: 'House & Disco-House', isEdm: true, bpm: '116-122 BPM', cue: 'Acoustic folk/world instruments, gentle shakers, and warm earthy sub-bass grooves.' },
-            { name: 'G-House', category: 'House & Disco-House', isEdm: true, bpm: '122-126 BPM', cue: 'Dark low-pitched hip-hop vocal samples over deep, menacing, sub-heavy house grooves.' },
-            { name: 'Melbourne Bounce', category: 'House & Disco-House', isEdm: true, bpm: '126-130 BPM', cue: 'Rubber-band offbeat donk/screech bassline bouncing against a heavy 4-on-the-floor kick.' },
-            { name: 'Complextro', category: 'House & Disco-House', isEdm: true, bpm: '126-132 BPM', cue: 'Rapid-fire mosaic of switching electro bass patches, chiptune blips, and choppy drops.' },
-            { name: 'Future Rave', category: 'House & Disco-House', isEdm: true, bpm: '124-128 BPM', cue: 'Dark underground techno kicks fused with huge stadium trance leads and dramatic breakdowns.' },
-            { name: 'Chicago / Jackin House', category: 'House & Disco-House', isEdm: true, bpm: '124-130 BPM', cue: 'Raw swung 909 drum bounce, chopped funky disco samples, and infectious jacking grooves.' },
-
-            // 2. UK Garage, Club & Breakbeat (19)
-            { name: 'UK Garage (UKG)', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130-136 BPM', cue: 'Swung shuffling hi-hats, organ/sub basslines, and chopped soulful vocal hooks.' },
-            { name: '2-Step Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130-135 BPM', cue: 'Syncopated skipped-kick rhythm (beats 1 and 3-and), crisp snares on 2 and 4, and silky R&B chops.' },
-            { name: 'Speed Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130-138 BPM', cue: 'Heavy 4x4 or swung garage bounce with warped Reese bass, gunshots, and time-stretched vocals.' },
-            { name: 'Bassline / Niche', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '135-142 BPM', cue: 'Relentless 4-on-the-floor club kick driven by rubbery, heavily modulated wobbly bass riffs.' },
-            { name: 'Future Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128-136 BPM', cue: 'Atmospheric reverb-drenched pads, vinyl crackle, pitched vocal ghosts, and delicate 2-step drums.' },
-            { name: 'UK Funky', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '126-132 BPM', cue: 'Syncopated soca/afro-influenced tom rhythms, crisp rimshots, and bouncy UK club bass.' },
-            { name: 'Grime', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '138-142 BPM', cue: 'Sparse jagged square-wave/eskimo synth stabs, sharp electronic snares, and heavy 808 sub-bass.' },
-            { name: 'Jersey Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '135-145 BPM', cue: 'Signature triplet kick bounce (boom-boom-boom-boom-boom), bed squeaks, and rapid vocal chops.' },
-            { name: 'Baltimore Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128-134 BPM', cue: 'Chugging chopped breakbeat stabs, repetitive call-and-response chants, and raw club percussion.' },
-            { name: 'Philly Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '136-144 BPM', cue: 'Fast aggressive club kicks, dark brass/siren stabs, and frenetic stuttered vocal loops.' },
-            { name: 'Footwork / Juke', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '155-165 BPM', cue: 'Frenetic triplet 808 rhythms, hypnotic rapid-fire vocal chops, and sparse deep sub-bass.' },
-            { name: 'Miami Bass', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '125-135 BPM', cue: 'Booming sustained TR-808 sub kicks, crisp electro cowbells, and party call-and-response hooks.' },
-            { name: 'Ghettotech', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '145-160 BPM', cue: 'High-speed Detroit electro-techno drums paired with raw chopped vocals and pounding 808s.' },
-            { name: 'Breakbeat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '125-138 BPM', cue: 'Syncopated non-four-on-the-floor drum breaks paired with funky electronic bass and synths.' },
-            { name: 'Big Beat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '120-135 BPM', cue: 'Heavy compressed rock-club breakbeats, distorted acid synths, and arena-sized riffs.' },
-            { name: 'Nu Skool Breaks', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128-136 BPM', cue: 'Sleek futuristic breakbeats with techy sub-bass, sci-fi synth stabs, and crisp club production.' },
-            { name: 'Acid Breaks', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128-138 BPM', cue: 'Rolling breakbeat drums driven by squelching, resonant TB-303 acid synth lines.' },
-            { name: 'Electro', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '125-136 BPM', cue: 'Robotic syncopated TR-808 drum programming, vocoders, and cold sci-fi analog synth bass.' },
-            { name: 'Broken Beat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '120-130 BPM', cue: 'Off-kilter jazz-funk syncopated claps/snares, warm Rhodes chords, and agile synth bass.' },
-
-            // 3. Drum & Bass & Jungle (12)
-            { name: 'Liquid Drum & Bass', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170-176 BPM', cue: 'Smooth rolling breakbeats paired with lush atmospheric pads, piano chords, and soulful vocals.' },
-            { name: 'Neurofunk', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172-176 BPM', cue: 'Dark technical DnB featuring heavily modulated sci-fi Reese basslines and razor-sharp snares.' },
-            { name: 'Jump-Up DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172-176 BPM', cue: 'High-energy rave DnB with bouncy, screechy frog/foghorn bass stabs and punchy two-step breaks.' },
-            { name: 'Dancefloor DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172-176 BPM', cue: 'Anthemic festival DnB with bright soaring synth leads, pop-ready vocals, and clean driving drums.' },
-            { name: 'Techstep', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170-175 BPM', cue: 'Cold industrial sci-fi DnB with distorted steppy drum patterns and menacing bass rumbles.' },
-            { name: 'Jungle', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '160-172 BPM', cue: 'Rapidly chopped, pitch-shifted Amen breakbeats over booming reggae-inspired 808 sub-bass.' },
-            { name: 'Ragga Jungle', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '165-175 BPM', cue: 'Frantic chopped jungle breaks fused with dancehall/reggae vocal samples and dub sirens.' },
-            { name: 'Drumstep', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170-176 BPM', cue: 'Half-time dubstep snare feel (beat 3) at fast DnB tempo with aggressive bass drops.' },
-            { name: 'Halftime DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '85-90 / 170 BPM', cue: 'Sparse heavy half-speed hip-hop/bass groove layered with intricate fast DnB percussion.' },
-            { name: 'Breakcore', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '175-220+ BPM', cue: 'Chaotic hyper-chopped glitchy Amen breaks, extreme speed switches, and distorted rave stabs.' },
-            { name: 'Atmospheric / Intelligent DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '165-174 BPM', cue: 'Dreamy ambient synth washes, jazzy chords, and crisp understated fast breakbeats.' },
-            { name: 'Sambass', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170-175 BPM', cue: 'Rolling Brazilian bossa/samba guitar, shakers, and brass fused with upbeat drum & bass.' },
-
-            // 4. Bass, Dubstep & EDM Trap (16)
-            { name: 'Classic / Deep Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '138-142 BPM', cue: 'Spacious dark halftime groove with weighty sinusoidal sub-bass pressure and dub-delayed snares.' },
-            { name: 'Brostep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-150 BPM', cue: 'Aggressive metallic midrange bass growls, screeches, and heavy slamming halftime snares.' },
-            { name: 'Riddim', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-145 BPM', cue: 'Repetitive hypnotic minimalist dubstep with bouncy robotic quarter-note bass wobbles.' },
-            { name: 'Melodic Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-150 BPM', cue: 'Soaring emotive supersaw chord drops blended with heavy bass growls and cinematic vocals.' },
-            { name: 'Colour Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-150 BPM', cue: 'Vocoded, harmonically shimmering pitched bass growls creating bright crystalline chord drops.' },
-            { name: 'Chillstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '135-142 BPM', cue: 'Gentle halftime beats, warm soothing pads, soft sub-bass, and atmospheric airy melodies.' },
-            { name: 'Post-Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '125-140 BPM', cue: 'Experimental moody blend of sparse dubstep sub-bass, R&B vocals, and minimal electronics.' },
-            { name: 'Future Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '135-160 BPM', cue: 'Lush detuned supersaw chord swells, heavy sidechain LFO pumping, and pitched vocal chops.' },
-            { name: 'Kawaii Future Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-170 BPM', cue: 'Ultra-bright chiptune/bell synths, playful bouncy chord stabs, and cute pitched-up vocal chops.' },
-            { name: 'Wave / Hardwave', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '130-150 BPM', cue: 'Atmospheric gritty Reese bass, soaring trance-like supersaws, and trap hi-hat percussion.' },
-            { name: 'EDM Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '135-155 BPM', cue: 'Festival-scale 808 sub drops, rapid hi-hat rolls, brass hits, and hype snare-roll builds.' },
-            { name: 'Hybrid Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-155 BPM', cue: 'Trap 808 drum bounce fused with dubstep-style metallic bass design and screeching leads.' },
-            { name: 'Festival Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140-150 BPM', cue: 'Anthemic big-room synth builds dropping into booming 808 trap percussion and horn stabs.' },
-            { name: 'Midtempo Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '90-108 BPM', cue: 'Slow menacing cyberpunk stomp with heavily distorted industrial bass and pounding snares.' },
-            { name: 'Leftfield / Experimental Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '80-145 BPM', cue: 'Unconventional off-grid bass sound design, organic foley percussion, and wobbly sub textures.' },
-            { name: 'Wonky', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '85-140 BPM', cue: 'Unquantized drunk-beat hip-hop/bass rhythms with unstable pitch-bent colorful synth leads.' },
-
-            // 5. Techno & Industrial (14)
-            { name: 'Detroit Techno', category: 'Techno & Industrial', isEdm: true, bpm: '125-135 BPM', cue: 'Soulful futuristic analog chord stabs, rolling 909 hi-hats, and hypnotic synth arpeggios.' },
-            { name: 'Minimal Techno', category: 'Techno & Industrial', isEdm: true, bpm: '124-130 BPM', cue: 'Stripped-back clicking micro-percussion, subtle hypnotic sub-pulse, and sparse tonal loops.' },
-            { name: 'Acid Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132-145 BPM', cue: 'Relentless pounding techno kick driven by screaming, resonant TB-303 acid squelches.' },
-            { name: 'Hard Techno', category: 'Techno & Industrial', isEdm: true, bpm: '142-155 BPM', cue: 'Aggressive distorted warehouse kicks, rumbling sub-reverb, and relentless rave stabs.' },
-            { name: 'Industrial Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132-145 BPM', cue: 'Harsh metallic clang percussion, distorted mechanical textures, and dark cavernous reverb.' },
-            { name: 'Melodic Techno', category: 'Techno & Industrial', isEdm: true, bpm: '122-128 BPM', cue: 'Dark driving techno pulse paired with emotive arpeggiated analog leads and epic builds.' },
-            { name: 'Peak-Time / Driving Techno', category: 'Techno & Industrial', isEdm: true, bpm: '130-138 BPM', cue: 'High-energy big-room techno rumble, tense white-noise sweeps, and commanding synth hooks.' },
-            { name: 'Dub Techno', category: 'Techno & Industrial', isEdm: true, bpm: '116-124 BPM', cue: 'Deep submerged minor chord stabs washed in rhythmic tape delay and warm vinyl hiss.' },
-            { name: 'Raw / Hypnotic Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132-142 BPM', cue: 'Loop-driven loopy modular bleeps, gritty analog saturation, and trance-inducing groove.' },
-            { name: 'Schranz', category: 'Techno & Industrial', isEdm: true, bpm: '145-160 BPM', cue: 'Ultra-fast, heavily compressed looping distorted percussion and relentless hard kicks.' },
-            { name: 'EBM (Electronic Body Music)', category: 'Techno & Industrial', isEdm: true, bpm: '115-132 BPM', cue: 'Pounding 16th-note analog sequencer basslines, harsh gated snares, and commanding vocals.' },
-            { name: 'Electro-Industrial', category: 'Techno & Industrial', isEdm: true, bpm: '110-130 BPM', cue: 'Dense distorted electronic percussion, dark dystopian synth pads, and gritty vocal processing.' },
-            { name: 'Dark Electro / Aggrotech', category: 'Techno & Industrial', isEdm: true, bpm: '130-145 BPM', cue: 'Harsh club-ready supersaw leads, heavy four-on-the-floor beats, and distorted vocals.' },
-            { name: 'New Beat', category: 'Techno & Industrial', isEdm: true, bpm: '105-118 BPM', cue: 'Slowed-down hypnotic Belgian club groove with acid basslines and eerie dramatic synth stabs.' },
-
-            // 6. Trance & Euro-Dance (14)
-            { name: 'Uplifting Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '136-140 BPM', cue: 'Rolling 16th-note offbeat bass, soaring emotional breakdowns, and shimmering supersaws.' },
-            { name: 'Progressive Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '128-134 BPM', cue: 'Hypnotic driving groove with gradual layered melodic builds and spacious atmospheric pads.' },
-            { name: 'Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '138-145 BPM', cue: 'Fast galloping triplet/16th-note rolling basslines, psychedelic acid squelches, and sci-fi FX.' },
-            { name: 'Goa Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '135-145 BPM', cue: 'Hypnotic Eastern-scale arpeggiated acid synths layered over driving analog trance kicks.' },
-            { name: 'Hard Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '140-148 BPM', cue: 'Punchy reverse-bass kicks, piercing hoover/acid riffs, and dark rave breakdowns.' },
-            { name: 'Vocal Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '130-138 BPM', cue: 'Euphoric ethereal lead vocals soaring over pulsing arpeggios and lush trance supersaws.' },
-            { name: 'Tech Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '134-140 BPM', cue: 'Gritty driving techno percussion fused with dramatic trance breakdowns and sharp synth stabs.' },
-            { name: 'Eurodance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '130-145 BPM', cue: 'High-energy 90s club synths, bright diva choruses, octave basslines, and rhythmic rap verses.' },
-            { name: 'Eurobeat', category: 'Trance & Euro-Dance', isEdm: true, bpm: '150-165 BPM', cue: 'Blistering high-speed synth brass riffs (sabi), racing octave bass, and dramatic melody hooks.' },
-            { name: 'Hi-NRG', category: 'Trance & Euro-Dance', isEdm: true, bpm: '128-140 BPM', cue: 'Relentless pulsing 80s octave synth-bass, crisp snare claps, and theatrical upbeat vocals.' },
-            { name: 'Italo Disco', category: 'Trance & Euro-Dance', isEdm: true, bpm: '115-128 BPM', cue: 'Dreamy nostalgic analog arpeggios, pulsing octave synth bass, vocoders, and melodic hooks.' },
-            { name: 'Hands Up', category: 'Trance & Euro-Dance', isEdm: true, bpm: '140-148 BPM', cue: 'Bouncy offbeat club bass, ultra-catchy bright supersaw pop hooks, and euphoric rave builds.' },
-            { name: 'Makina', category: 'Trance & Euro-Dance', isEdm: true, bpm: '165-180 BPM', cue: 'Rapid Spanish rave kicks, bouncing offbeat basslines, and bright melodic synth arpeggios.' },
-            { name: 'Bubblegum Dance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '132-145 BPM', cue: 'Playful ultra-sweet major-key Eurodance synths, toy-like leads, and bouncy party hooks.' },
-
-            // 7. Hard Dance, Hardcore & Hyperpop (15)
-            { name: 'Hardstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '148-155 BPM', cue: 'Distorted pitched tok-and-tail kicks, reverse basslines, and anthemic rave synth leads.' },
-            { name: 'Euphoric Hardstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '150-155 BPM', cue: 'Soaring emotional trance-style supersaw melodies paired with pitched hardstyle kicks.' },
-            { name: 'Rawstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '150-160 BPM', cue: 'Dark aggressive screeches, brutal gated/zaag kicks, and heavy industrial drops.' },
-            { name: 'Jumpstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '140-150 BPM', cue: 'Bouncy stomping 909 kick paired with a rubbery offbeat bass and simple party synth riffs.' },
-            { name: 'Gabber / Mainstream Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '165-185 BPM', cue: 'Relentless overdriven 909 bass-drum kicks, dark hoover synths, and aggressive rave energy.' },
-            { name: 'Happy Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '165-178 BPM', cue: 'Racing upbeat rave kicks, joyful piano/supersaw chord stabs, and pitched-up vocals.' },
-            { name: 'UK Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '170-178 BPM', cue: 'Polished high-speed trance melodies, offbeat sub-bass, and euphoric soaring vocal drops.' },
-            { name: 'Frenchcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '190-215 BPM', cue: 'Blistering fast offbeat melodic kicks paired with dramatic orchestral or rave synth hooks.' },
-            { name: 'Uptempo Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '195-220+ BPM', cue: 'Extreme high-BPM heavily distorted piep/zaag kicks and intense festival rave drops.' },
-            { name: 'Speedcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '250-400+ BPM', cue: 'Ultra-fast machine-gun distorted kicks pushing into rhythmic noise and chaotic synths.' },
-            { name: 'Hardbass', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '150-160 BPM', cue: 'Signature hollow offbeat donk basslines, bouncy club kicks, and chanted rhythmic hooks.' },
-            { name: 'Hyperpop', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '130-175 BPM', cue: 'Maximalist pitch-shifted autotune vocals, blown-out 808s, glittering synths, and wild switches.' },
-            { name: 'Glitchcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '140-175 BPM', cue: 'Rapid stutter-edited vocals, clipped bitcrushed 808s, frantic trap percussion, and chaotic drops.' },
-            { name: 'Digicore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '130-165 BPM', cue: 'Emo-melodic autotuned vocals over bright shimmering hyperpop synths and punchy trap drums.' },
-            { name: 'Electroclash', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '122-135 BPM', cue: 'Gritty 80s new-wave synths, punky deadpan vocals, and raw crunchy analog electro drums.' },
-
-            // 8. Synth, Retro & Global Club (18)
-            { name: 'Synthwave / Outrun', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '100-125 BPM', cue: 'Nostalgic 80s analog polysynths, gated-reverb snares, and pulsing arpeggiated basslines.' },
-            { name: 'Darksynth', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '105-135 BPM', cue: 'Aggressive distorted retro-futuristic synths, heavy metal/industrial drums, and ominous leads.' },
-            { name: 'Vaporwave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '70-100 BPM', cue: 'Slowed-down, pitch-shifted 80s/90s jazz-pop samples drenched in lush lo-fi reverb.' },
-            { name: 'Future Funk', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '120-130 BPM', cue: 'Sped-up sidechained disco/city-pop sample chops over punchy French-house club drums.' },
-            { name: 'Chillwave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '85-115 BPM', cue: 'Sun-bleached hazy vintage synths, dreamy washed-out vocals, and relaxed nostalgic beats.' },
-            { name: 'Synth-Pop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '110-130 BPM', cue: 'Bright melody-focused synthesizers, steady electronic drum machines, and crisp retro-modern hooks.' },
-            { name: 'Electropop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '112-130 BPM', cue: 'Hook-driven pop vocals backed by modern polished electronic synths and punchy club drums.' },
-            { name: 'Indietronica', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '105-128 BPM', cue: 'Indie guitars and intimate vocals blended with crisp electronic drum machines and warm synths.' },
-            { name: 'IDM / Glitch', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '90-165 BPM', cue: 'Intricate experimental drum programming, micro-stutter edits, and complex synth sound design.' },
-            { name: 'Ambient / Downtempo', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '65-100 BPM', cue: 'Expansive atmospheric synth pads, gentle subtle percussion, and meditative sonic textures.' },
-            { name: 'Trip-Hop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '75-98 BPM', cue: 'Slow moody hip-hop breakbeats, deep dub basslines, vinyl crackle, and cinematic noir pads.' },
-            { name: 'Chiptune / Bitpop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '120-170 BPM', cue: '8-bit/16-bit retro video-game square-wave arpeggios, noise-channel drums, and catchy melodies.' },
-            { name: 'Moombahton', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '105-112 BPM', cue: 'Midtempo reggaeton dembow pulse combined with heavy Dutch electro-house synth leads.' },
-            { name: 'Moombahcore', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '108-115 BPM', cue: 'Moombahton dembow rhythm supercharged with aggressive dubstep bass growls and wobbles.' },
-            { name: 'Baile Funk (Funk Carioca)', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '125-135 BPM', cue: 'Syncopated Brazilian tamborzao drum bounce, booming 808 hits, and raw chanted hooks.' },
-            { name: 'Brazilian Phonk', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '125-140 BPM', cue: 'Distorted clipping sub-bass and metallic agogo/cowbell hits over aggressive baile funk bounce.' },
-            { name: 'Drift Phonk', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '120-165 BPM', cue: 'Distorted Memphis 808 cowbell melodies, clipped booming bass, and lo-fi rap vocal loops.' },
-            { name: 'Digital Dancehall / Kuduro / Gqom', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '100-140 BPM', cue: 'Syncopated electronic Caribbean/African club rhythms, raw synthetic stabs, and dark sub-bass.' },
-
-            // 9. R&B, Soul & Funk (8)
-            { name: 'Contemporary R&B', category: 'R&B, Soul & Funk', isEdm: false, bpm: '70-105 BPM', cue: 'Polished soulful vocals, lush chord progressions, and crisp modern electronic percussion.' },
-            { name: 'Alternative R&B', category: 'R&B, Soul & Funk', isEdm: false, bpm: '70-115 BPM', cue: 'Moody atmospheric synth textures, unconventional sparse beats, and intimate airy vocals.' },
-            { name: 'Neo-Soul', category: 'R&B, Soul & Funk', isEdm: false, bpm: '75-98 BPM', cue: 'Warm Rhodes electric piano, jazzy extended chords, and laid-back swung organic grooves.' },
-            { name: 'New Jack Swing', category: 'R&B, Soul & Funk', isEdm: false, bpm: '100-116 BPM', cue: 'Swung 90s drum-machine bounce, orchestra hits, slap bass, and tight R&B vocal harmonies.' },
-            { name: 'Funk', category: 'R&B, Soul & Funk', isEdm: false, bpm: '98-118 BPM', cue: 'Syncopated slap/finger basslines, tight rhythmic guitar chops, and punchy brass stabs.' },
-            { name: 'Synth-Funk / Boogie', category: 'R&B, Soul & Funk', isEdm: false, bpm: '105-120 BPM', cue: 'Early-80s post-disco groove featuring fat analog synth-bass slabs, handclaps, and talkbox/synths.' },
-            { name: 'Disco', category: 'R&B, Soul & Funk', isEdm: false, bpm: '114-126 BPM', cue: 'Four-on-the-floor dance groove with octave bass, shimmering orchestral strings, and rhythm guitar.' },
-            { name: 'Quiet Storm', category: 'R&B, Soul & Funk', isEdm: false, bpm: '65-85 BPM', cue: 'Silky late-night slow-jam R&B with smooth sax/synth pads and velvety vocal phrasing.' },
-
-            // 10. Hip-Hop & Rap (8)
-            { name: 'Trap (Hip-Hop)', category: 'Hip-Hop & Rap', isEdm: false, bpm: '125-150 BPM', cue: 'Sliding 808 sub-bass, rapid-fire triplet hi-hats, sparse dark synths, and crisp snares.' },
-            { name: 'Boom Bap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '84-98 BPM', cue: 'Hard-hitting acoustic kick-snare patterns, dusty chopped sample loops, and classic rap cadence.' },
-            { name: 'Drill (UK / NY)', category: 'Hip-Hop & Rap', isEdm: false, bpm: '138-146 BPM', cue: 'Gliding ominous 808 bass slides, syncopated 3-step hi-hats, and dark piano/string loops.' },
-            { name: 'Cloud Rap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '115-140 BPM', cue: 'Dreamy reverb-drenched ethereal synth samples, hazy vocal layers, and slow trap drums.' },
-            { name: 'G-Funk / West Coast', category: 'Hip-Hop & Rap', isEdm: false, bpm: '88-100 BPM', cue: 'Laid-back bounce, high-pitched portamento synth leads, and deep rolling funk bass.' },
-            { name: 'Memphis Rap / Phonk', category: 'Hip-Hop & Rap', isEdm: false, bpm: '115-145 BPM', cue: 'Lo-fi dark tape-saturated 808 cowbells, eerie horror-synth loops, and chopped Memphis vocals.' },
-            { name: 'Plugg / Pluggnb', category: 'Hip-Hop & Rap', isEdm: false, bpm: '128-145 BPM', cue: 'Dreamy lush R&B electric piano chords paired with bouncy sparse 808s and twinkling leads.' },
-            { name: 'Alternative Hip-Hop', category: 'Hip-Hop & Rap', isEdm: false, bpm: '85-120 BPM', cue: 'Eclectic genre-bending beats fusing jazz, indie, or electronic textures with creative rap flow.' },
-
-            // 11. Pop, Rock & Acoustic (7)
-            { name: 'Dance-Pop', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '115-130 BPM', cue: 'Upbeat club-ready pop arrangement built around catchy choruses and four-on-the-floor grooves.' },
-            { name: 'Bubblegum Pop', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '115-135 BPM', cue: 'Upbeat major-key melodies, bright bouncy percussion, and ultra-catchy chantable hooks.' },
-            { name: 'Pop Rock', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '105-135 BPM', cue: 'Live electric guitar-and-drum band energy structured around glossy, radio-ready choruses.' },
-            { name: 'Pop-Punk', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '145-185 BPM', cue: 'Fast palm-muted power chords, energetic snare-heavy punk drums, and anthemic hooks.' },
-            { name: 'Alternative / Indie Rock', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '95-140 BPM', cue: 'Expressive textured electric guitars, organic live drums, and dynamic indie arrangements.' },
-            { name: 'Acoustic / Ballad', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '60-95 BPM', cue: 'Slow emotive tempo led by piano, acoustic guitar, or soft strings with expressive vocals.' },
-            { name: 'Orchestral / Cinematic', category: 'Pop, Rock & Acoustic', isEdm: false, bpm: '70-130 BPM', cue: 'Sweeping symphonic strings, brass swells, and dramatic percussion framing modern melodies.' }
-        ];
-
-        const CANONICAL_CATEGORIES = [...new Set(GENRE_TAXONOMY.map(g => g.category))];
-
-        // Build normalized lookup map for fast matching
-        function normalizeGenreKey(str) {
-            return String(str || '')
-                .toLowerCase()
-                .replace(/&/g, 'and')
-                .replace(/[\/\-_(),.]+/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
+        function openNavDrawer() {
+            if (!navDrawerBackdrop) return;
+            navDrawerBackdrop.classList.add('open');
+            navDrawerBackdrop.setAttribute('aria-hidden', 'false');
+            if (btnOpenMenu) btnOpenMenu.setAttribute('aria-expanded', 'true');
         }
 
-        const CANONICAL_GENRE_MAP = new Map();
-        GENRE_TAXONOMY.forEach((g) => {
-            CANONICAL_GENRE_MAP.set(normalizeGenreKey(g.name), g);
-            if (g.name.includes('/')) {
-                g.name.split('/').forEach((part) => {
-                    const k = normalizeGenreKey(part);
-                    if (k && !CANONICAL_GENRE_MAP.has(k)) CANONICAL_GENRE_MAP.set(k, g);
+        function closeNavDrawer() {
+            if (!navDrawerBackdrop) return;
+            navDrawerBackdrop.classList.remove('open');
+            navDrawerBackdrop.setAttribute('aria-hidden', 'true');
+            if (btnOpenMenu) btnOpenMenu.setAttribute('aria-expanded', 'false');
+        }
+
+        if (btnOpenMenu) btnOpenMenu.addEventListener('click', openNavDrawer);
+        if (btnCloseMenu) btnCloseMenu.addEventListener('click', closeNavDrawer);
+        if (navDrawerBackdrop) {
+            navDrawerBackdrop.addEventListener('click', (e) => {
+                if (e.target === navDrawerBackdrop) closeNavDrawer();
+            });
+            navDrawerBackdrop.querySelectorAll('[data-drawer-view]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const targetView = btn.dataset.drawerView;
+                    closeNavDrawer();
+                    switchTab(targetView);
                 });
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navDrawerBackdrop && navDrawerBackdrop.classList.contains('open')) {
+                closeNavDrawer();
             }
         });
 
-        const GENRE_ALIASES = {
-            'uk garage': 'UK Garage (UKG)',
-            'ukg': 'UK Garage (UKG)',
-            '2 step': '2-Step Garage',
-            '2 step garage': '2-Step Garage',
-            'uk bassline': 'Bassline / Niche',
-            'bassline': 'Bassline / Niche',
-            'dnb': 'Liquid Drum & Bass',
-            'drum and bass': 'Liquid Drum & Bass',
-            'liquid dnb': 'Liquid Drum & Bass',
-            'synthwave': 'Synthwave / Outrun',
-            'retrowave': 'Synthwave / Outrun',
-            'outrun': 'Synthwave / Outrun',
-            'dark synth': 'Darksynth',
-            'cyberpunk': 'Darksynth',
-            'dubstep': 'Classic / Deep Dubstep',
-            'color bass': 'Colour Bass',
-            'footwork': 'Footwork / Juke',
-            'juke': 'Footwork / Juke',
-            'drill': 'Drill (UK / NY)',
-            'uk drill': 'Drill (UK / NY)',
-            'ny drill': 'Drill (UK / NY)',
-            'pluggnb': 'Plugg / Pluggnb',
-            'wave': 'Wave / Hardwave',
-            'hardwave': 'Wave / Hardwave',
-            'idm': 'IDM / Glitch',
-            'glitch': 'IDM / Glitch',
-            'baile funk': 'Baile Funk (Funk Carioca)',
-            'funk carioca': 'Baile Funk (Funk Carioca)',
-            'ebm': 'EBM (Electronic Body Music)',
-            'gabber': 'Gabber / Mainstream Hardcore',
-            'chicago house': 'Chicago / Jackin House',
-            'jackin house': 'Chicago / Jackin House',
-            'trap': 'Trap (Hip-Hop)',
-            'modern trap': 'Trap (Hip-Hop)',
-            'pop punk': 'Pop-Punk',
-            'ballad': 'Acoustic / Ballad',
-            'acoustic pop': 'Acoustic / Ballad',
-            'disco pop': 'Nu-Disco',
-            'orchestral pop': 'Orchestral / Cinematic'
-        };
-
-        function resolveCanonicalGenre(rawName) {
-            const key = normalizeGenreKey(rawName);
-            if (!key) return null;
-            if (CANONICAL_GENRE_MAP.has(key)) return CANONICAL_GENRE_MAP.get(key);
-            if (GENRE_ALIASES[key]) {
-                return CANONICAL_GENRE_MAP.get(normalizeGenreKey(GENRE_ALIASES[key])) || null;
-            }
-            return null;
-        }
-
-        // =====================================================
-        // 2. APPLICATION STATE & DOM REFERENCES
-        // =====================================================
-        const state = {
-            activeTab: 'analyze',
-            viewingHistoryId: null,
-            currentTrackHistoryId: null,
-            loadedAudioHistoryId: null,
-            currentBlob: null,
-            currentLocalTitle: 'Audio Track',
-            currentSourceType: 'file',
-            objectUrl: null,
-            audioBuffer: null,
-            encodedAudioBase64: null,
-            encodedMimeType: 'audio/wav',
-            acousticMetrics: null,
-            aiResult: null,
-            lastModelUsed: '',
-            lastErrorText: '',
-            isAnalyzing: false,
-            lastProbeResult: null,
-            lastSuggestions: [],
-            activeFeedbackDraft: { stars: 0, votes: {}, missed: [], note: '' },
-
-            // Player & Visualizer
-            isPlaying: false,
-            vizMode: 'spectrum',
-            audioCtx: null,
-            analyser: null,
-            mediaSource: null,
-            vizRafId: null,
-
-            // Mic Recording
-            micStream: null,
-            micCtx: null,
-            micProcessor: null,
-            micChunks: [],
-            micSampleRate: 44100,
-            micStartTime: 0,
-            micTimerId: null,
-
-            // History, Learning & Genre Directory
-            history: [],
-            learning: { ratedCount: 0, confirmedCounts: {}, rejectedCounts: {}, recentFeedback: [] },
-            historySearch: '',
-            genreSearch: '',
-            genreEdmOnly: false,
-            genreMatchedOnly: false,
-            genreCategory: 'All',
-
-            // PWA & Offline Support
-            isOnline: typeof navigator !== 'undefined' ? navigator.onLine !== false : true,
-            deferredInstallPrompt: null,
-            pwaManifestMode: 'Checking...',
-            pwaSwStatus: 'Not Hosted Yet',
-            swRegistration: null
-        };
-
-        const $ = (id) => document.getElementById(id);
-
-        const els = {
-            // Tabs & Views
-            viewAnalyze: $('view-analyze'),
-            viewHistory: $('view-history'),
-            viewGenres: $('view-genres'),
-            tabAnalyze: $('tab-btn-analyze'),
-            tabHistory: $('tab-btn-history'),
-            tabGenres: $('tab-btn-genres'),
-            badgeHistoryCount: $('badge-history-count'),
-            badgeGenresCount: $('badge-genres-count'),
-            btnHeaderNew: $('btn-header-new'),
-            btnInstallApp: $('btn-install-app'),
-            offlineBanner: $('offline-banner'),
-            swUpdateBanner: $('sw-update-banner'),
-            btnSwReload: $('btn-sw-reload'),
-            offlineAiCard: $('offline-ai-card'),
-            btnOfflineRetryAi: $('btn-offline-retry-ai'),
-
-            // Upload & Mic
-            fileInput: $('audioFileInput'),
-            uploadPanel: $('upload-panel'),
-            dropZone: $('drop-zone'),
-            btnStartMic: $('btn-start-mic'),
-            micPanel: $('mic-panel'),
-            micTimer: $('mic-timer'),
-            micLevelFill: $('mic-level-fill'),
-            btnStopMic: $('btn-stop-mic'),
-            btnCancelMic: $('btn-cancel-mic'),
-
-            // Workspace & Saved Banner
-            workspacePanel: $('workspace-panel'),
-            savedReportBanner: $('saved-report-banner'),
-            savedReportTitle: $('saved-report-title'),
-            savedReportMeta: $('saved-report-meta'),
-            btnSavedBackHistory: $('btn-saved-back-history'),
-            btnSavedNewTrack: $('btn-saved-new-track'),
-
-            // Player & Visualizer
-            playerCard: $('player-card'),
-            playerSourceLabel: $('player-source-label'),
-            playerTrackTitle: $('player-track-title'),
-            btnVizSpectrum: $('btn-viz-spectrum'),
-            btnVizWaveform: $('btn-viz-waveform'),
-            vizWrap: $('visualizer-wrap'),
-            vizCanvas: $('visualizer-canvas'),
-            btnPlayPause: $('btn-play-pause'),
-            iconPlay: $('icon-play'),
-            iconPause: $('icon-pause'),
-            audioScrub: $('audio-scrub'),
-            timeCurrent: $('time-current'),
-            timeDuration: $('time-duration'),
-            sampleWindowText: $('sample-window-text'),
-            btnAnalyzeTrack: $('btn-analyze-track'),
-            btnAnalyzeLabel: $('btn-analyze-label'),
-            btnWorkspaceNew: $('btn-workspace-new'),
-            audioEl: $('audio-element'),
-
-            // Status & Errors
-            statusCard: $('status-card'),
-            statusHeadline: $('status-headline'),
-            statusSubtext: $('status-subtext'),
-            stepPills: [$('step-1'), $('step-2'), $('step-3'), $('step-4'), $('step-5')],
-            dspNoticeBanner: $('dsp-notice-banner'),
-            dspNoticeText: $('dsp-notice-text'),
-            errorBanner: $('error-banner'),
-            errorTitle: $('error-title'),
-            errorMessage: $('error-message'),
-            btnErrorRetry: $('btn-error-retry'),
-            btnErrorSettings: $('btn-error-settings'),
-            btnErrorCopy: $('btn-error-copy'),
-
-            // DSP Results
-            dspSection: $('dsp-section'),
-            dspBpm: $('dsp-bpm'),
-            dspCentroid: $('dsp-centroid'),
-            dspBrightnessLabel: $('dsp-brightness-label'),
-            dspEnergy: $('dsp-energy'),
-            dspRmsDb: $('dsp-rms-db'),
-            dspPercussiveness: $('dsp-percussiveness'),
-            dspBassPct: $('dsp-bass-pct'),
-            dspMidPct: $('dsp-mid-pct'),
-            dspTreblePct: $('dsp-treble-pct'),
-            dspBarBass: $('dsp-bar-bass'),
-            dspBarMid: $('dsp-bar-mid'),
-            dspBarTreble: $('dsp-bar-treble'),
-            dspProfileText: $('dsp-profile-text'),
-            dspProfileTags: $('dsp-profile-tags'),
-
-            // AI Results
-            aiResultsSection: $('ai-results-section'),
-            btnCopyReport: $('btn-copy-report'),
-            edmPrimaryFamily: $('edm-primary-family'),
-            edmScoreValue: $('edm-score-value'),
-            edmScoreBar: $('edm-score-bar'),
-            edmSummaryText: $('edm-summary-text'),
-            edmSignatureSoundsWrap: $('edm-signature-sounds-wrap'),
-            edmSignatureSounds: $('edm-signature-sounds'),
-            edmSubgenresList: $('edm-subgenres-list'),
-            edmSectionShiftsWrap: $('edm-section-shifts-wrap'),
-            edmSectionShifts: $('edm-section-shifts'),
-            edmElDrums: $('edm-el-drums'),
-            edmElBass: $('edm-el-bass'),
-            edmElSynths: $('edm-el-synths'),
-            edmElDrop: $('edm-el-drop'),
-            topGenresList: $('top-genres-list'),
-            instrumentsChips: $('instruments-chips'),
-            moodsChips: $('moods-chips'),
-            noteRhythm: $('note-rhythm'),
-            noteVocals: $('note-vocals'),
-            noteProduction: $('note-production'),
-            sonicReasoningText: $('sonic-reasoning-text'),
-
-            // Learning Pills, Probe, Suggestions & Feedback
-            uploadLearningPill: $('upload-learning-pill'),
-            uploadLearningText: $('upload-learning-text'),
-            resultsLearningPill: $('results-learning-pill'),
-            resultsLearningText: $('results-learning-text'),
-            probeNoAudioNote: $('probe-no-audio-note'),
-            inputProbeSubgenre: $('input-probe-subgenre'),
-            taxonomyDatalist: $('taxonomy-datalist'),
-            btnProbeSubgenre: $('btn-probe-subgenre'),
-            probeResultCard: $('probe-result-card'),
-            probeResultName: $('probe-result-name'),
-            probeVerdictBadge: $('probe-verdict-badge'),
-            probeConfidence: $('probe-confidence'),
-            probeEvidence: $('probe-evidence'),
-            probeClosestWrap: $('probe-closest-wrap'),
-            probeClosestName: $('probe-closest-name'),
-            btnProbeAdd: $('btn-probe-add'),
-            btnAskSuggestions: $('btn-ask-suggestions'),
-            suggestionsList: $('suggestions-list'),
-            inputManualGenre: $('input-manual-genre'),
-            btnAddManualGenre: $('btn-add-manual-genre'),
-            feedbackSavedBadge: $('feedback-saved-badge'),
-            starRatingRow: $('star-rating-row'),
-            starRatingLabel: $('star-rating-label'),
-            feedbackVoteSummary: $('feedback-vote-summary'),
-            inputFeedbackMissed: $('input-feedback-missed'),
-            inputFeedbackNote: $('input-feedback-note'),
-            btnSaveFeedback: $('btn-save-feedback'),
-
-            // History Tab
-            inputHistorySearch: $('input-history-search'),
-            btnHistoryExport: $('btn-history-export'),
-            historyImportInput: $('historyImportInput'),
-            btnHistoryClear: $('btn-history-clear'),
-            historyEmpty: $('history-empty'),
-            historyEmptyTitle: $('history-empty-title'),
-            historyEmptySub: $('history-empty-sub'),
-            btnEmptyAnalyze: $('btn-empty-analyze'),
-            historyList: $('history-list'),
-
-            // Genres Tab
-            dirStatMatched: $('dir-stat-matched'),
-            dirStatTracks: $('dir-stat-tracks'),
-            dirStatEdm: $('dir-stat-edm'),
-            inputGenreSearch: $('input-genre-search'),
-            btnDirScopeAll: $('btn-dir-scope-all'),
-            btnDirScopeEdm: $('btn-dir-scope-edm'),
-            btnDirAll: $('btn-dir-all'),
-            btnDirMatched: $('btn-dir-matched'),
-            genreCategoryPills: $('genre-category-pills'),
-            genresEmpty: $('genres-empty'),
-            genreDirectoryList: $('genre-directory-list'),
-
-            // Modals
-            btnOpenSettings: $('btn-open-settings'),
-            settingsKeyDot: $('settings-key-dot'),
-            settingsModal: $('settings-modal'),
-            btnCloseSettings: $('btn-close-settings'),
-            inputApiKey: $('input-api-key'),
-            selectModel: $('select-model'),
-            testKeyResult: $('test-key-result'),
-            btnTestKey: $('btn-test-key'),
-            btnClearKey: $('btn-clear-key'),
-            btnSaveSettings: $('btn-save-settings'),
-            settingsLearningCount: $('settings-learning-count'),
-            settingsLearningSummary: $('settings-learning-summary'),
-            settingsLearningChips: $('settings-learning-chips'),
-            btnClearLearning: $('btn-clear-learning'),
-            pwaReadyBadge: $('pwa-ready-badge'),
-            pwaDiagHttps: $('pwa-diag-https'),
-            pwaDiagManifest: $('pwa-diag-manifest'),
-            pwaDiagSw: $('pwa-diag-sw'),
-            pwaDiagDisplay: $('pwa-diag-display'),
-            btnDlManifest: $('btn-dl-manifest'),
-            btnDlSw: $('btn-dl-sw'),
-            btnDlIcon192: $('btn-dl-icon-192'),
-            btnDlIcon512: $('btn-dl-icon-512'),
-
-            clearHistoryModal: $('clear-history-modal'),
-            btnCancelClearHistory: $('btn-cancel-clear-history'),
-            btnConfirmClearHistory: $('btn-confirm-clear-history'),
-
-            toast: $('toast')
-        };
-
-        // =====================================================
-        // 3. UTILITIES (ESCAPE, TOAST, CLIPBOARD, TIME)
-        // =====================================================
-        function escapeHtml(str) {
-            return String(str ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
-        let toastTimeout = null;
-        function showToast(msg, type = 'info') {
-            els.toast.textContent = msg;
-            els.toast.className = `toast show ${type}`;
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => {
-                els.toast.classList.remove('show');
-            }, 3000);
-        }
-
-        function copyTextFallback(text) {
-            try {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.style.position = 'fixed';
-                ta.style.top = '-9999px';
-                ta.style.left = '-9999px';
-                document.body.appendChild(ta);
-                ta.focus();
-                ta.select();
-                const ok = document.execCommand('copy');
-                document.body.removeChild(ta);
-                return ok;
-            } catch {
-                return false;
-            }
-        }
-
-        function formatTime(sec) {
-            if (!Number.isFinite(sec) || sec < 0) return '0:00';
-            const m = Math.floor(sec / 60);
-            const s = Math.floor(sec % 60);
-            return `${m}:${String(s).padStart(2, '0')}`;
-        }
-
-        function formatDateShort(iso) {
-            try {
-                return new Date(iso).toLocaleString(undefined, {
-                    month: 'short', day: 'numeric', year: 'numeric',
-                    hour: 'numeric', minute: '2-digit'
-                });
-            } catch {
-                return iso || '';
-            }
-        }
-
-        // =====================================================
-        // 4. STRICT TAB & MODAL NAVIGATION
-        // =====================================================
         function switchTab(tabName) {
             state.activeTab = tabName;
 
-            els.viewAnalyze.classList.toggle('active', tabName === 'analyze');
-            els.viewHistory.classList.toggle('active', tabName === 'history');
-            els.viewGenres.classList.toggle('active', tabName === 'genres');
+            if (els.viewAnalyze) els.viewAnalyze.classList.toggle('active', tabName === 'analyze');
+            if (els.viewHistory) els.viewHistory.classList.toggle('active', tabName === 'history');
+            if (els.viewGenres) els.viewGenres.classList.toggle('active', tabName === 'genres');
+            if (viewPwaEl) viewPwaEl.classList.toggle('active', tabName === 'pwa');
 
-            els.tabAnalyze.classList.toggle('active', tabName === 'analyze');
-            els.tabHistory.classList.toggle('active', tabName === 'history');
-            els.tabGenres.classList.toggle('active', tabName === 'genres');
+            if (els.tabAnalyze) els.tabAnalyze.classList.toggle('active', tabName === 'analyze');
+            if (els.tabGenres) els.tabGenres.classList.toggle('active', tabName === 'genres');
+
+            if (navDrawerBackdrop) {
+                navDrawerBackdrop.querySelectorAll('[data-drawer-view]').forEach((btn) => {
+                    btn.classList.toggle('active', btn.dataset.drawerView === tabName);
+                });
+            }
 
             if (tabName === 'history') renderHistoryView();
             if (tabName === 'genres') renderGenresDirectoryView();
-            if (tabName === 'analyze' && !els.playerCard.classList.contains('is-hidden')) {
+            if (tabName === 'pwa') updatePwaDiagnosticsUI();
+            if (tabName === 'analyze' && els.playerCard && !els.playerCard.classList.contains('is-hidden')) {
                 requestAnimationFrame(resizeVisualizer);
             }
         }
 
-        els.tabAnalyze.addEventListener('click', () => switchTab('analyze'));
-        els.tabHistory.addEventListener('click', () => switchTab('history'));
-        els.tabGenres.addEventListener('click', () => switchTab('genres'));
+        if (els.tabAnalyze) els.tabAnalyze.addEventListener('click', () => switchTab('analyze'));
+        if (els.tabGenres) els.tabGenres.addEventListener('click', () => switchTab('genres'));
 
         function openModal(modalEl) {
             modalEl.classList.add('open');
@@ -2865,163 +2576,22 @@
 
         function refreshSettingsIndicator() {
             const hasKey = Boolean(getSavedApiKey());
-            els.settingsKeyDot.classList.toggle('is-hidden', !hasKey);
+            safeShow('settings-key-dot', hasKey);
+            safeShow('drawer-key-badge', hasKey);
         }
 
-        els.btnOpenSettings.addEventListener('click', () => {
+        function openSettingsModal() {
             els.inputApiKey.value = getSavedApiKey();
             els.selectModel.value = getSavedModel();
             els.testKeyResult.classList.add('is-hidden');
             updateLearningUI();
-            updatePwaDiagnosticsUI();
             openModal(els.settingsModal);
-        });
-
-        els.btnCloseSettings.addEventListener('click', () => closeModal(els.settingsModal));
-        els.settingsModal.addEventListener('click', (e) => {
-            if (e.target === els.settingsModal) closeModal(els.settingsModal);
-        });
-
-        els.btnSaveSettings.addEventListener('click', () => {
-            try {
-                const key = els.inputApiKey.value.trim();
-                if (key) localStorage.setItem(STORAGE_KEY_API, key);
-                else localStorage.removeItem(STORAGE_KEY_API);
-                localStorage.setItem(STORAGE_KEY_MODEL, els.selectModel.value);
-                refreshSettingsIndicator();
-                closeModal(els.settingsModal);
-                showToast('API settings saved.', 'success');
-            } catch {
-                showToast('Could not write to localStorage.', 'error');
-            }
-        });
-
-        els.btnClearKey.addEventListener('click', () => {
-            els.inputApiKey.value = '';
-            try { localStorage.removeItem(STORAGE_KEY_API); } catch {}
-            refreshSettingsIndicator();
-            showToast('Custom API key cleared.', 'info');
-        });
-
-        els.btnTestKey.addEventListener('click', async () => {
-            const key = els.inputApiKey.value.trim();
-            const chosenModel = els.selectModel.value === 'auto' ? MODEL_FALLBACK_CHAIN[0] : els.selectModel.value;
-            els.testKeyResult.classList.remove('is-hidden');
-            els.testKeyResult.style.color = '#94a3b8';
-            els.testKeyResult.textContent = `Testing connection with ${chosenModel}...`;
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${encodeURIComponent(key)}`;
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: 'Reply with OK' }] }],
-                        generationConfig: { maxOutputTokens: 10 }
-                    })
-                });
-                if (!res.ok) {
-                    const txt = await res.text();
-                    throw new Error(`HTTP ${res.status}: ${txt.slice(0, 140)}`);
-                }
-                els.testKeyResult.style.color = '#34d399';
-                els.testKeyResult.textContent = `Success! Connected to ${chosenModel}.`;
-            } catch (err) {
-                els.testKeyResult.style.color = '#fb7185';
-                els.testKeyResult.textContent = `Test failed: ${err.message || err}`;
-            }
-        });
-
-        // =====================================================
-        // 6. RESET & WORKSPACE VISIBILITY MANAGEMENT
-        // =====================================================
-        function resetToUpload() {
-            stopMicCapture(true);
-            stopPlayback();
-
-            if (state.objectUrl) {
-                URL.revokeObjectURL(state.objectUrl);
-                state.objectUrl = null;
-            }
-            state.viewingHistoryId = null;
-            state.currentTrackHistoryId = null;
-            state.loadedAudioHistoryId = null;
-            state.currentBlob = null;
-            state.audioBuffer = null;
-            state.encodedAudioBase64 = null;
-            state.encodedMimeType = 'audio/wav';
-            state.acousticMetrics = null;
-            state.aiResult = null;
-            state.lastProbeResult = null;
-            state.lastSuggestions = [];
-            state.activeFeedbackDraft = { stars: 0, votes: {}, missed: [], note: '' };
-            state.lastErrorText = '';
-            state.isAnalyzing = false;
-            els.fileInput.value = '';
-
-            els.uploadPanel.classList.remove('is-hidden');
-            els.dropZone.classList.remove('is-hidden');
-            els.micPanel.classList.add('is-hidden');
-            els.workspacePanel.classList.add('is-hidden');
-            els.savedReportBanner.classList.add('is-hidden');
-            els.playerCard.classList.remove('is-hidden');
-            els.btnHeaderNew.classList.add('is-hidden');
-            els.statusCard.classList.add('is-hidden');
-            els.dspNoticeBanner.classList.add('is-hidden');
-            els.errorBanner.classList.add('is-hidden');
-            els.offlineAiCard.classList.add('is-hidden');
-            els.dspSection.classList.add('is-hidden');
-            els.aiResultsSection.classList.add('is-hidden');
-
-            switchTab('analyze');
         }
 
-        els.btnHeaderNew.addEventListener('click', resetToUpload);
-        els.btnWorkspaceNew.addEventListener('click', resetToUpload);
-        els.btnSavedNewTrack.addEventListener('click', resetToUpload);
-        els.btnSavedBackHistory.addEventListener('click', () => switchTab('history'));
-        els.btnEmptyAnalyze.addEventListener('click', resetToUpload);
-
-        // =====================================================
-        // 7. FILE UPLOAD (ANDROID-SAFE) & DESKTOP DRAG-AND-DROP
-        // =====================================================
-        els.fileInput.addEventListener('change', (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (file) handleAudioFile(file);
-        });
-
-        ['dragenter', 'dragover'].forEach((evt) => {
-            els.dropZone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                els.dropZone.classList.add('drag-over');
-            });
-        });
-
-        ['dragleave', 'drop'].forEach((evt) => {
-            els.dropZone.addEventListener(evt, (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                els.dropZone.classList.remove('drag-over');
-            });
-        });
-
-        els.dropZone.addEventListener('drop', (e) => {
-            const file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-            if (file) handleAudioFile(file);
-        });
-
-        async function handleAudioFile(file) {
-            const validExt = /\.(mp3|wav|m4a|ogg|flac|aac|opus)$/i.test(file.name || '');
-            if (!file.type.startsWith('audio/') && !validExt) {
-                showToast('Please select a valid audio file (MP3, WAV, M4A, AAC, OGG, FLAC, OPUS).', 'error');
-                return;
-            }
-            const cleanTitle = (file.name || 'Audio Track').replace(/\.[^/.]+$/, '').trim() || 'Audio Track';
-            await loadAudioBlobAndAnalyze(file, {
-                localTitle: cleanTitle,
-                sourceType: 'file',
-                sourceLabel: 'Local Audio File (Metadata Stripped)'
+        if (btnDrawerSettings) {
+            btnDrawerSettings.addEventListener('click', () => {
+                closeNavDrawer();
+                openSettingsModal();
             });
         }
 
@@ -3478,9 +3048,30 @@
 
         function renderDspMetrics(m) {
             if (!m) {
-                els.dspSection.classList.add('is-hidden');
+                safeShow('dsp-section', false);
                 return;
             }
+            safeSetText('dsp-bpm', String(m.bpm));
+            safeSetText('dsp-centroid', `${m.spectralCentroidHz} Hz`);
+            safeSetText('dsp-brightness-label', m.brightnessLabel || 'Brightness');
+            safeSetText('dsp-energy', `${m.energyScore}/100`);
+            safeSetText('dsp-rms-db', `${m.rmsDb} dBFS`);
+            safeSetText('dsp-percussiveness', `${m.percussiveness}/100`);
+
+            safeSetText('dsp-bass-pct', `${m.bassPct}%`);
+            safeSetText('dsp-mid-pct', `${m.midPct}%`);
+            safeSetText('dsp-treble-pct', `${m.treblePct}%`);
+            safeSetStyle('dsp-bar-bass', 'width', `${m.bassPct}%`);
+            safeSetStyle('dsp-bar-mid', 'width', `${m.midPct}%`);
+            safeSetStyle('dsp-bar-treble', 'width', `${m.treblePct}%`);
+
+            safeSetText('dsp-profile-text', m.timbralProfile || '');
+            safeSetHTML('dsp-profile-tags', (m.profileTags || [])
+                .map(t => `<span class="chip chip-cyan">${escapeHtml(t)}</span>`)
+                .join(''));
+
+            safeShow('dsp-section', true);
+        }
             els.dspBpm.textContent = String(m.bpm);
             els.dspCentroid.textContent = `${m.spectralCentroidHz} Hz`;
             els.dspBrightnessLabel.textContent = m.brightnessLabel || 'Brightness';
@@ -3646,10 +3237,11 @@
         // 12. 5-STEP PIPELINE & GEMINI API WITH FALLBACK + BACKOFF
         // =====================================================
         function updatePipelineUI(activeStep, headline, subtext, skippedSteps = []) {
-            els.statusCard.classList.remove('is-hidden');
-            els.statusHeadline.textContent = headline;
-            els.statusSubtext.textContent = subtext;
+            safeShow('status-card', true);
+            safeSetText('status-headline', headline);
+            safeSetText('status-subtext', subtext);
             els.stepPills.forEach((pill, idx) => {
+                if (!pill) return;
                 const stepNum = idx + 1;
                 pill.classList.remove('active', 'done', 'skipped');
                 if (skippedSteps.includes(stepNum)) pill.classList.add('skipped');
@@ -3660,38 +3252,26 @@
 
         function setAnalyzeBusy(busy) {
             state.isAnalyzing = busy;
-            els.btnAnalyzeTrack.disabled = busy;
-            els.btnAnalyzeLabel.textContent = busy ? 'Analyzing...' : (state.aiResult ? 'Re-Analyze Track' : 'Analyze Track');
+            if (els.btnAnalyzeTrack) els.btnAnalyzeTrack.disabled = busy;
+            safeSetText('btn-analyze-label', busy ? 'Analyzing...' : (state.aiResult ? 'Re-Analyze Track' : 'Analyze Track'));
         }
 
         function showErrorBanner(title, message) {
             state.lastErrorText = `${title}: ${message}`;
-            els.errorTitle.textContent = title;
-            els.errorMessage.textContent = message;
-            els.errorBanner.classList.remove('is-hidden');
+            safeSetText('error-title', title);
+            safeSetText('error-message', message);
+            safeShow('error-banner', true);
         }
 
-        els.btnErrorCopy.addEventListener('click', () => {
-            if (copyTextFallback(state.lastErrorText || 'Unknown error')) {
-                showToast('Error details copied.', 'success');
-            }
-        });
-
-        els.btnErrorSettings.addEventListener('click', () => {
-            els.inputApiKey.value = getSavedApiKey();
-            els.selectModel.value = getSavedModel();
-            els.testKeyResult.classList.add('is-hidden');
-            openModal(els.settingsModal);
-        });
-
-        els.btnErrorRetry.addEventListener('click', () => {
+        els.btnAnalyzeTrack.addEventListener('click', () => {
+            if (state.isAnalyzing) return;
             if (state.encodedAudioBase64) {
                 runAiStage(state.encodedAudioBase64, state.encodedMimeType);
             } else if (state.currentBlob) {
                 loadAudioBlobAndAnalyze(state.currentBlob, {
                     localTitle: state.currentLocalTitle,
                     sourceType: state.currentSourceType,
-                    sourceLabel: els.playerSourceLabel.textContent
+                    sourceLabel: els.playerSourceLabel ? els.playerSourceLabel.textContent : 'Metadata-Stripped Audio'
                 });
             }
         });
@@ -4063,13 +3643,173 @@
 
         async function runAiStage(audioBase64, mimeType, skippedSteps = []) {
             if (!navigator.onLine) {
-                els.statusCard.classList.add('is-hidden');
-                els.errorBanner.classList.add('is-hidden');
-                els.offlineAiCard.classList.remove('is-hidden');
+                safeShow('status-card', false);
+                safeShow('error-banner', false);
+                safeShow('offline-ai-card', true);
                 setAnalyzeBusy(false);
                 showToast('Offline — Local acoustic DSP is ready. Retry AI once reconnected.', 'info');
                 return;
             }
+            setAnalyzeBusy(true);
+            safeShow('error-banner', false);
+            safeShow('offline-ai-card', false);
+            try {
+                updatePipelineUI(5, 'Step 5/5: Running Gemini Pure Musical & EDM Analysis...', 'Dissecting EDM subgenres, drum groove, bass design & synth textures', skippedSteps);
+                const aiData = await callGeminiAudioClassifier(audioBase64, mimeType);
+                state.aiResult = aiData;
+                state.lastProbeResult = null;
+                state.lastSuggestions = [];
+                state.activeFeedbackDraft = { stars: 0, votes: {}, missed: [], note: '' };
+                safeShow('status-card', false);
+                try {
+                    const savedEntry = saveAnalysisToHistory(aiData, state.acousticMetrics, state.lastModelUsed);
+                    state.currentTrackHistoryId = savedEntry.id;
+                    state.loadedAudioHistoryId = savedEntry.id;
+                } catch (saveErr) {
+                    console.error('History save error:', saveErr);
+                }
+                renderAiResults(aiData);
+                setAnalyzeBusy(false);
+                showToast('Analysis complete & saved to History!', 'success');
+            } catch (err) {
+                safeShow('status-card', false);
+                setAnalyzeBusy(false);
+                if (!navigator.onLine) {
+                    safeShow('offline-ai-card', true);
+                    showToast('Connection lost — Local stats remain ready. Tap Retry once online.', 'info');
+                    return;
+                }
+                const hint = err.status === 403
+                    ? ' (HTTP 403: Open API Key Settings to add your free Gemini API key if running outside Canvas.)'
+                    : '';
+                showErrorBanner('Gemini AI Analysis Failed', `${err.message || err}${hint}`);
+            }
+        }
+
+        // =====================================================
+        // 13. RENDER AI RESULTS & COPY FULL REPORT
+        // =====================================================
+        function renderVoteButtonsHtml(genreName) {
+            const key = normalizeGenreKey(genreName);
+            const vote = state.activeFeedbackDraft?.votes?.[key] || '';
+            return `
+                <div class="vote-group">
+                    <button type="button" class="vote-btn ${vote === 'up' ? 'voted-up' : ''}" data-vote="up" data-genre="${escapeHtml(genreName)}" title="Accurate genre" aria-label="Thumbs up for ${escapeHtml(genreName)}">&#128077;</button>
+                    <button type="button" class="vote-btn ${vote === 'down' ? 'voted-down' : ''}" data-vote="down" data-genre="${escapeHtml(genreName)}" title="Inaccurate genre" aria-label="Thumbs down for ${escapeHtml(genreName)}">&#128078;</button>
+                </div>
+            `;
+        }
+
+        function renderAiResults(ai) {
+            if (!ai) {
+                safeShow('ai-results-section', false);
+                return;
+            }
+
+            // EDM Deep-Dive
+            const edm = getNormalizedEdmData(ai);
+            safeSetText('edm-score-value', `${edm.influence}%`);
+            safeSetStyle('edm-score-bar', 'width', `${edm.influence}%`);
+            safeSetText('edm-summary-text', edm.summary || 'No EDM summary returned.');
+
+            if (edm.primaryFamily) {
+                safeSetText('edm-primary-family', edm.primaryFamily);
+                safeShow('edm-primary-family', true);
+            } else {
+                safeShow('edm-primary-family', false);
+            }
+
+            // Signature EDM Sounds
+            if (edm.signatureSounds.length > 0) {
+                safeSetHTML('edm-signature-sounds', edm.signatureSounds
+                    .map(tag => `<span class="chip chip-emerald">${escapeHtml(tag)}</span>`)
+                    .join(''));
+                safeShow('edm-signature-sounds-wrap', true);
+            } else {
+                safeShow('edm-signature-sounds-wrap', false);
+            }
+
+            // Ranked EDM Subgenres (up to 6+, including user-added)
+            if (edm.subgenres.length > 0) {
+                safeSetHTML('edm-subgenres-list', edm.subgenres.map((s, idx) => `
+                    <div class="genre-row">
+                        <div class="genre-row-head">
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px; min-width:0;">
+                                <span class="genre-name">#${idx + 1} ${escapeHtml(s.name)}</span>
+                                ${s.family ? `<span class="meta-pill meta-pill-bpm">${escapeHtml(s.family)}</span>` : ''}
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                                <span class="genre-pct">${s.confidence}%</span>
+                                ${renderVoteButtonsHtml(s.name)}
+                            </div>
+                        </div>
+                        <div class="bar-track" style="height:7px;">
+                            <div class="bar-fill-emerald" style="width:${Math.max(4, Math.min(100, s.confidence))}%;"></div>
+                        </div>
+                        <div style="font-size:0.8rem; color:var(--text-secondary);">${escapeHtml(s.evidence)}</div>
+                    </div>
+                `).join(''));
+            } else {
+                safeSetHTML('edm-subgenres-list', `
+                    <div class="card-subtle" style="font-size:0.84rem; color:var(--text-secondary);">
+                        Minimal or no distinct EDM subgenres detected in this clip. Production leans primarily acoustic, organic, or non-club.
+                    </div>
+                `);
+            }
+
+            // Section / Arrangement Shifts
+            if (edm.sectionShifts) {
+                safeSetText('edm-section-shifts', edm.sectionShifts);
+                safeShow('edm-section-shifts-wrap', true);
+            } else {
+                safeShow('edm-section-shifts-wrap', false);
+            }
+
+            safeSetText('edm-el-drums', edm.elements.drum_groove || 'N/A');
+            safeSetText('edm-el-bass', edm.elements.bass_design || 'N/A');
+            safeSetText('edm-el-synths', edm.elements.synth_textures || 'N/A');
+            safeSetText('edm-el-drop', edm.elements.drop_arrangement || 'N/A');
+
+            // Top Pure Musical Genres (with inline vote buttons)
+            const genres = Array.isArray(ai.genres) ? ai.genres : [];
+            safeSetHTML('top-genres-list', genres.map((g, i) => `
+                <div class="genre-row">
+                    <div class="genre-row-head">
+                        <span class="genre-name">#${i + 1} ${escapeHtml(g.name)}</span>
+                        <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                            <span class="genre-pct">${Math.round(Number(g.confidence) || 0)}%</span>
+                            ${renderVoteButtonsHtml(g.name)}
+                        </div>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill-cyan" style="width:${Math.max(4, Math.min(100, Number(g.confidence) || 0))}%;"></div>
+                    </div>
+                </div>
+            `).join(''));
+
+            // Instruments & Moods
+            safeSetHTML('instruments-chips', (ai.instruments || [])
+                .map(x => `<span class="chip chip-cyan">${escapeHtml(x)}</span>`).join(''));
+            safeSetHTML('moods-chips', (ai.moods || [])
+                .map(x => `<span class="chip chip-violet">${escapeHtml(x)}</span>`).join(''));
+
+            // Notes & Reasoning
+            safeSetText('note-rhythm', ai.rhythmNotes || 'N/A');
+            safeSetText('note-vocals', ai.vocalNotes || 'N/A');
+            safeSetText('note-production', ai.productionNotes || 'N/A');
+            safeSetText('sonic-reasoning-text', ai.reasoning || 'N/A');
+
+            // Sync interactive probe, suggestions, and feedback UI
+            updateProbeAudioAvailability();
+            renderFeedbackCard();
+            if (!state.lastProbeResult) safeShow('probe-result-card', false);
+            if (!state.lastSuggestions.length) {
+                safeSetHTML('suggestions-list', '');
+                safeShow('suggestions-list', false);
+            }
+
+            safeShow('ai-results-section', true);
+        }
             setAnalyzeBusy(true);
             els.errorBanner.classList.add('is-hidden');
             els.offlineAiCard.classList.add('is-hidden');
@@ -5244,8 +4984,11 @@
 
         function updateNavBadges() {
             const { matchedCount, totalCount } = computeGenreDirectory();
-            els.badgeHistoryCount.textContent = String(state.history.length);
-            els.badgeGenresCount.textContent = `${matchedCount}/${totalCount}`;
+            const historyCountStr = String(state.history.length);
+            const genresCountStr = `${matchedCount}/${totalCount}`;
+            safeSetText('badge-genres-count', genresCountStr);
+            safeSetText('drawer-badge-genres', genresCountStr);
+            safeSetText('drawer-badge-history', historyCountStr);
         }
 
         function renderGenresDirectoryView() {
@@ -5724,9 +5467,45 @@
         function updateOnlineStatus() {
             state.isOnline = navigator.onLine !== false;
             els.offlineBanner.classList.toggle('is-hidden', state.isOnline);
+            updatePwaDiagnosticsUI();
             if (state.isOnline && !els.offlineAiCard.classList.contains('is-hidden')) {
                 showToast('Back online! Tap Retry AI Analysis to finish genre classification.', 'success');
             }
+        }
+
+        function updatePwaDiagnosticsUI() {
+            const isHttps = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            const standalone = isStandaloneDisplayMode();
+
+            safeSetText('pwa-diag-https', isHttps ? 'Active (HTTPS)' : 'Local / Non-HTTPS');
+            if (els.pwaDiagHttps) els.pwaDiagHttps.className = `pwa-diag-value ${isHttps ? 'ok' : 'warn'}`;
+
+            safeSetText('pwa-diag-manifest', state.pwaManifestMode);
+            if (els.pwaDiagManifest) els.pwaDiagManifest.className = `pwa-diag-value ${state.pwaManifestMode === 'Hosted' ? 'ok' : 'info'}`;
+
+            safeSetText('pwa-diag-sw', state.pwaSwStatus);
+            if (els.pwaDiagSw) els.pwaDiagSw.className = `pwa-diag-value ${state.pwaSwStatus === 'Active' ? 'ok' : 'warn'}`;
+
+            safeSetText('pwa-diag-display', standalone ? 'Installed App' : 'Browser');
+            if (els.pwaDiagDisplay) els.pwaDiagDisplay.className = `pwa-diag-value ${standalone ? 'ok' : 'info'}`;
+
+            let statusText = 'Setup Kit';
+            let drawerBadgeText = 'Setup';
+            if (!state.isOnline) {
+                statusText = 'Offline';
+                drawerBadgeText = 'Offline';
+            } else if (standalone) {
+                statusText = 'Installed PWA';
+                drawerBadgeText = 'Installed';
+                if (els.btnInstallApp) els.btnInstallApp.classList.add('is-hidden');
+            } else if (isHttps && state.pwaManifestMode === 'Hosted' && state.pwaSwStatus === 'Active') {
+                statusText = 'PWA Ready';
+                drawerBadgeText = 'Ready';
+            }
+
+            safeSetText('pwa-ready-badge', statusText);
+            safeSetText('drawer-badge-pwa', drawerBadgeText);
+        }
         }
 
         function updatePwaDiagnosticsUI() {
