@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f19">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SonicLens">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0f19'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2322d3ee'/%3E%3Cstop offset='100%25' stop-color='%23a78bfa'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='url(%23g)' stroke-width='3.5'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%2322d3ee' stroke-opacity='0.35' stroke-width='1.5'/%3E%3Crect x='19' y='28' width='4' height='8' rx='2' fill='%2322d3ee'/%3E%3Crect x='25' y='21' width='4' height='22' rx='2' fill='%2338bdf8'/%3E%3Crect x='31' y='17' width='4' height='30' rx='2' fill='%23818cf8'/%3E%3Crect x='37' y='23' width='4' height='18' rx='2' fill='%23a78bfa'/%3E%3Crect x='43' y='28' width='4' height='8' rx='2' fill='%23c084fc'/%3E%3C/svg%3E">
     <title>SonicLens — Pure Musical &amp; EDM Genre Analyzer</title>
     <style>
         /* =========================================================
@@ -137,7 +143,9 @@
 
         .modal-card {
             width: 100%;
-            max-width: 460px;
+            max-width: 480px;
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
             background: var(--bg-surface);
             border: 1px solid var(--border-strong);
             border-radius: var(--radius-xl);
@@ -1282,6 +1290,136 @@
         }
 
         /* =========================================================
+           8C. PWA INSTALL, OFFLINE MODE & SETUP KIT STYLES
+           ========================================================= */
+        .btn-install {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 38px;
+            padding: 7px 12px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.22));
+            border: 1px solid var(--cyan-border);
+            color: #e0f2fe;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: filter 0.15s ease, transform 0.1s ease;
+            white-space: nowrap;
+        }
+
+        .btn-install:hover {
+            filter: brightness(1.12);
+        }
+
+        .btn-install:active {
+            transform: scale(0.97);
+        }
+
+        .offline-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 11px 14px;
+            margin-bottom: 14px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(30, 41, 59, 0.85));
+            border: 1px solid var(--amber-border);
+            color: #fef3c7;
+            font-size: 0.8rem;
+            line-height: 1.45;
+        }
+
+        .offline-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--amber);
+            margin-top: 5px;
+            flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.7);
+        }
+
+        .sw-update-banner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 11px 14px;
+            margin-bottom: 14px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(167, 139, 250, 0.16));
+            border: 1px solid var(--cyan-border);
+            color: #e0f2fe;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .offline-ai-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(15, 20, 32, 0.96));
+            border: 1px solid var(--amber-border);
+            border-radius: var(--radius-xl);
+            padding: 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .pwa-diag-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .pwa-diag-pill {
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .pwa-diag-label {
+            font-size: 0.66rem;
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .pwa-diag-value {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .pwa-diag-value.ok { color: var(--emerald); }
+        .pwa-diag-value.warn { color: var(--amber); }
+        .pwa-diag-value.info { color: var(--cyan); }
+
+        .pwa-download-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .pwa-download-grid .btn {
+            width: 100%;
+            min-height: 38px;
+            padding: 7px 10px;
+            font-size: 0.74rem;
+        }
+
+        /* =========================================================
            9. RESPONSIVE BREAKPOINTS (MOBILE-FIRST SAFETY)
            ========================================================= */
         @media (max-width: 768px) {
@@ -1344,6 +1482,14 @@
 
             <div class="header-actions">
                 <button type="button" id="btn-header-new" class="btn btn-secondary btn-sm is-hidden">New Track</button>
+                <button type="button" id="btn-install-app" class="btn-install is-hidden" title="Install SonicLens as an App">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    <span>Install</span>
+                </button>
                 <button type="button" id="btn-open-settings" class="icon-btn" title="API Key &amp; Model Settings" aria-label="API Key Settings">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
@@ -1380,6 +1526,20 @@
          MAIN CONTENT (STRICTLY ISOLATED VIEW PANELS)
          ========================================================= -->
     <main class="app-main">
+
+        <!-- OFFLINE MODE STATUS PILL / BANNER -->
+        <div id="offline-banner" class="offline-banner is-hidden" role="status" aria-live="polite">
+            <span class="offline-dot" aria-hidden="true"></span>
+            <div>
+                <strong>Offline Mode</strong> &mdash; Playback, Local DSP (BPM &amp; EQ), History, and Genre Directory work offline. AI genre analysis will run when you're back online.
+            </div>
+        </div>
+
+        <!-- SERVICE WORKER UPDATE AVAILABLE BANNER -->
+        <div id="sw-update-banner" class="sw-update-banner is-hidden" role="status" aria-live="polite">
+            <span>Update Available &mdash; A newer version of SonicLens is ready.</span>
+            <button type="button" id="btn-sw-reload" class="btn btn-primary btn-sm">Reload</button>
+        </div>
 
         <!-- =====================================================
              VIEW 1: ANALYZE
@@ -1575,43 +1735,15 @@
                             <span class="chip chip-emerald">Instant Local Signal</span>
                         </div>
 
-                        <div class="grid-4">
-                            <div class="stat-box">
-                                <span class="stat-label">Estimated Tempo</span>
-                                <span id="dsp-bpm" class="stat-value">--</span>
-                                <span class="stat-sub">BPM (onset flux)</span>
-                            </div>
-                            <div class="stat-box">
-                                <span class="stat-label">Spectral Centroid</span>
-                                <span id="dsp-centroid" class="stat-value">--</span>
-                                <span id="dsp-brightness-label" class="stat-sub">Brightness</span>
-                            </div>
-                            <div class="stat-box">
-                                <span class="stat-label">Energy / Loudness</span>
-                                <span id="dsp-energy" class="stat-value">--</span>
-                                <span id="dsp-rms-db" class="stat-sub">-- dBFS</span>
-                            </div>
-                            <div class="stat-box">
-                                <span class="stat-label">Percussiveness</span>
-                                <span id="dsp-percussiveness" class="stat-value">--</span>
-                                <span class="stat-sub">Zero-Crossing Rate</span>
-                            </div>
+                    <!-- GRACEFUL OFFLINE AI NOTICE CARD -->
+                    <div id="offline-ai-card" class="offline-ai-card is-hidden">
+                        <div style="flex:1 1 240px; min-width:0;">
+                            <div class="stat-label" style="color:var(--amber);">Offline Mode &mdash; AI Analysis Paused</div>
+                            <p style="margin:5px 0 0; font-size:0.86rem; color:#fef3c7;">
+                                You're offline &mdash; Local acoustic stats are ready. Tap <strong>Retry AI Analysis</strong> once reconnected.
+                            </p>
                         </div>
-
-                        <div class="card-subtle stack-md">
-                            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; font-size:0.78rem; font-family:var(--font-mono);">
-                                <span style="color:#c4b5fd;">Bass: <strong id="dsp-bass-pct">0%</strong></span>
-                                <span style="color:#67e8f9;">Mid: <strong id="dsp-mid-pct">0%</strong></span>
-                                <span style="color:#6ee7b7;">Treble: <strong id="dsp-treble-pct">0%</strong></span>
-                            </div>
-                            <div class="freq-bar">
-                                <div id="dsp-bar-bass" class="freq-bass" style="width:33%"></div>
-                                <div id="dsp-bar-mid" class="freq-mid" style="width:34%"></div>
-                                <div id="dsp-bar-treble" class="freq-treble" style="width:33%"></div>
-                            </div>
-                            <div id="dsp-profile-text" style="font-size:0.84rem; color:var(--text-secondary);"></div>
-                            <div id="dsp-profile-tags" class="chip-list"></div>
-                        </div>
+                        <button type="button" id="btn-offline-retry-ai" class="btn btn-primary btn-sm">Retry AI Analysis</button>
                     </div>
 
                     <!-- AI GENRE & EDM DEEP-DIVE RESULTS -->
@@ -2014,6 +2146,44 @@
                         <button type="button" id="btn-clear-learning" class="btn btn-danger btn-sm">Clear Learning Memory</button>
                     </div>
                 </div>
+
+                <!-- PWA & OFFLINE SETUP (GITHUB PAGES) SECTION -->
+                <div style="padding-top:14px; border-top:1px solid var(--border-subtle);" class="stack-md">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                        <h4 class="section-title" style="font-size:0.94rem;">PWA &amp; Offline Setup (GitHub Pages)</h4>
+                        <span id="pwa-ready-badge" class="chip chip-cyan" style="font-size:0.68rem;">Web App</span>
+                    </div>
+
+                    <div class="pwa-diag-grid">
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">HTTPS</span>
+                            <span id="pwa-diag-https" class="pwa-diag-value">Checking...</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Manifest</span>
+                            <span id="pwa-diag-manifest" class="pwa-diag-value">Checking...</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Service Worker</span>
+                            <span id="pwa-diag-sw" class="pwa-diag-value">Not Hosted Yet</span>
+                        </div>
+                        <div class="pwa-diag-pill">
+                            <span class="pwa-diag-label">Display Mode</span>
+                            <span id="pwa-diag-display" class="pwa-diag-value">Browser</span>
+                        </div>
+                    </div>
+
+                    <div class="pwa-download-grid">
+                        <button type="button" id="btn-dl-manifest" class="btn btn-secondary btn-sm">Download manifest.webmanifest</button>
+                        <button type="button" id="btn-dl-sw" class="btn btn-secondary btn-sm">Download sw.js</button>
+                        <button type="button" id="btn-dl-icon-192" class="btn btn-secondary btn-sm">Download icon-192.png</button>
+                        <button type="button" id="btn-dl-icon-512" class="btn btn-secondary btn-sm">Download icon-512.png</button>
+                    </div>
+
+                    <p class="stat-sub" style="margin:0; line-height:1.45; color:var(--text-secondary);">
+                        Upload <code>index.html</code>, <code>manifest.webmanifest</code>, <code>sw.js</code>, <code>icon-192.png</code>, and <code>icon-512.png</code> to your GitHub repo root for full Android WebAPK installation and offline loading.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -2368,7 +2538,14 @@
             genreSearch: '',
             genreEdmOnly: false,
             genreMatchedOnly: false,
-            genreCategory: 'All'
+            genreCategory: 'All',
+
+            // PWA & Offline Support
+            isOnline: typeof navigator !== 'undefined' ? navigator.onLine !== false : true,
+            deferredInstallPrompt: null,
+            pwaManifestMode: 'Checking...',
+            pwaSwStatus: 'Not Hosted Yet',
+            swRegistration: null
         };
 
         const $ = (id) => document.getElementById(id);
@@ -2384,6 +2561,12 @@
             badgeHistoryCount: $('badge-history-count'),
             badgeGenresCount: $('badge-genres-count'),
             btnHeaderNew: $('btn-header-new'),
+            btnInstallApp: $('btn-install-app'),
+            offlineBanner: $('offline-banner'),
+            swUpdateBanner: $('sw-update-banner'),
+            btnSwReload: $('btn-sw-reload'),
+            offlineAiCard: $('offline-ai-card'),
+            btnOfflineRetryAi: $('btn-offline-retry-ai'),
 
             // Upload & Mic
             fileInput: $('audioFileInput'),
@@ -2547,6 +2730,15 @@
             settingsLearningSummary: $('settings-learning-summary'),
             settingsLearningChips: $('settings-learning-chips'),
             btnClearLearning: $('btn-clear-learning'),
+            pwaReadyBadge: $('pwa-ready-badge'),
+            pwaDiagHttps: $('pwa-diag-https'),
+            pwaDiagManifest: $('pwa-diag-manifest'),
+            pwaDiagSw: $('pwa-diag-sw'),
+            pwaDiagDisplay: $('pwa-diag-display'),
+            btnDlManifest: $('btn-dl-manifest'),
+            btnDlSw: $('btn-dl-sw'),
+            btnDlIcon192: $('btn-dl-icon-192'),
+            btnDlIcon512: $('btn-dl-icon-512'),
 
             clearHistoryModal: $('clear-history-modal'),
             btnCancelClearHistory: $('btn-cancel-clear-history'),
@@ -2681,6 +2873,7 @@
             els.selectModel.value = getSavedModel();
             els.testKeyResult.classList.add('is-hidden');
             updateLearningUI();
+            updatePwaDiagnosticsUI();
             openModal(els.settingsModal);
         });
 
@@ -2776,6 +2969,7 @@
             els.statusCard.classList.add('is-hidden');
             els.dspNoticeBanner.classList.add('is-hidden');
             els.errorBanner.classList.add('is-hidden');
+            els.offlineAiCard.classList.add('is-hidden');
             els.dspSection.classList.add('is-hidden');
             els.aiResultsSection.classList.add('is-hidden');
 
@@ -3502,8 +3696,11 @@
             }
         });
 
-        els.btnAnalyzeTrack.addEventListener('click', () => {
-            if (state.isAnalyzing) return;
+        els.btnOfflineRetryAi.addEventListener('click', () => {
+            if (!navigator.onLine) {
+                showToast('Still offline — reconnect to Wi-Fi or mobile data, then tap Retry.', 'info');
+                return;
+            }
             if (state.encodedAudioBase64) {
                 runAiStage(state.encodedAudioBase64, state.encodedMimeType);
             } else if (state.currentBlob) {
@@ -3543,6 +3740,7 @@
             els.btnHeaderNew.classList.remove('is-hidden');
             els.dspNoticeBanner.classList.add('is-hidden');
             els.errorBanner.classList.add('is-hidden');
+            els.offlineAiCard.classList.add('is-hidden');
             els.dspSection.classList.add('is-hidden');
             els.aiResultsSection.classList.add('is-hidden');
 
@@ -3864,8 +4062,17 @@
         }
 
         async function runAiStage(audioBase64, mimeType, skippedSteps = []) {
+            if (!navigator.onLine) {
+                els.statusCard.classList.add('is-hidden');
+                els.errorBanner.classList.add('is-hidden');
+                els.offlineAiCard.classList.remove('is-hidden');
+                setAnalyzeBusy(false);
+                showToast('Offline — Local acoustic DSP is ready. Retry AI once reconnected.', 'info');
+                return;
+            }
             setAnalyzeBusy(true);
             els.errorBanner.classList.add('is-hidden');
+            els.offlineAiCard.classList.add('is-hidden');
             try {
                 updatePipelineUI(5, 'Step 5/5: Running Gemini Pure Musical & EDM Analysis...', 'Dissecting EDM subgenres, drum groove, bass design & synth textures', skippedSteps);
                 const aiData = await callGeminiAudioClassifier(audioBase64, mimeType);
@@ -3883,6 +4090,11 @@
             } catch (err) {
                 els.statusCard.classList.add('is-hidden');
                 setAnalyzeBusy(false);
+                if (!navigator.onLine) {
+                    els.offlineAiCard.classList.remove('is-hidden');
+                    showToast('Connection lost — Local stats remain ready. Tap Retry once online.', 'info');
+                    return;
+                }
                 const hint = err.status === 403
                     ? ' (HTTP 403: Open API Key Settings to add your free Gemini API key if running outside Canvas.)'
                     : '';
@@ -4406,8 +4618,8 @@
                 showToast('Enter a subgenre name to check against the audio.', 'info');
                 return;
             }
-            if (BANNED_GENRE_REGEX.test(query)) {
-                showToast('SonicLens excludes regional/industry tags (like K-pop). Try a musical or EDM subgenre instead!', 'error');
+            if (!navigator.onLine) {
+                showToast('You are offline. Reconnect to probe the audio with Gemini AI.', 'info');
                 return;
             }
             if (!hasLoadedAudioForCurrentReport()) {
@@ -4472,6 +4684,10 @@
         }
 
         async function handleAskMoreSuggestions() {
+            if (!navigator.onLine) {
+                showToast('You are offline. Reconnect to request AI genre suggestions.', 'info');
+                return;
+            }
             if (!hasLoadedAudioForCurrentReport()) {
                 showToast('Raw audio is not loaded in memory. Re-upload this track to request AI suggestions.', 'error');
                 return;
@@ -4728,6 +4944,7 @@
             els.playerCard.classList.add('is-hidden');
             els.statusCard.classList.add('is-hidden');
             els.errorBanner.classList.add('is-hidden');
+            els.offlineAiCard.classList.add('is-hidden');
             els.dspNoticeBanner.classList.add('is-hidden');
             els.btnHeaderNew.classList.remove('is-hidden');
 
@@ -5185,6 +5402,428 @@
         // =====================================================
         // 16. INITIALIZATION ON WINDOW LOAD
         // =====================================================
+        // 15B. PWA MANIFEST, SERVICE WORKER, INSTALL & OFFLINE
+        // =====================================================
+        function isStandaloneDisplayMode() {
+            return (
+                (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+                window.navigator.standalone === true
+            );
+        }
+
+        function generateSonicLensIconCanvas(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // Full-bleed non-transparent #0b0f19 background (required for Android WebAPK / maskable icons)
+            ctx.fillStyle = '#0b0f19';
+            ctx.fillRect(0, 0, size, size);
+
+            // Subtle ambient radial glow behind emblem
+            const glow = ctx.createRadialGradient(size * 0.5, size * 0.5, size * 0.06, size * 0.5, size * 0.5, size * 0.46);
+            glow.addColorStop(0, 'rgba(34, 211, 238, 0.24)');
+            glow.addColorStop(0.55, 'rgba(167, 139, 250, 0.14)');
+            glow.addColorStop(1, 'rgba(11, 15, 25, 0)');
+            ctx.fillStyle = glow;
+            ctx.fillRect(0, 0, size, size);
+
+            // Outer lens ring (kept well within maskable safe zone: radius 0.34 * size)
+            const cx = size * 0.5;
+            const cy = size * 0.5;
+            const ringGrad = ctx.createLinearGradient(size * 0.15, size * 0.15, size * 0.85, size * 0.85);
+            ringGrad.addColorStop(0, '#22d3ee');
+            ringGrad.addColorStop(0.55, '#60a5fa');
+            ringGrad.addColorStop(1, '#a78bfa');
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, size * 0.34, 0, Math.PI * 2);
+            ctx.strokeStyle = ringGrad;
+            ctx.lineWidth = Math.max(4, size * 0.048);
+            ctx.stroke();
+
+            // Inner lens ring
+            ctx.beginPath();
+            ctx.arc(cx, cy, size * 0.25, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(34, 211, 238, 0.32)';
+            ctx.lineWidth = Math.max(2, size * 0.016);
+            ctx.stroke();
+
+            // Crisp 5-bar neon waveform inside lens
+            const heights = [0.13, 0.28, 0.38, 0.24, 0.13];
+            const barColors = ['#22d3ee', '#38bdf8', '#818cf8', '#a78bfa', '#c084fc'];
+            const barW = size * 0.056;
+            const gap = size * 0.032;
+            const totalW = heights.length * barW + (heights.length - 1) * gap;
+            const startX = cx - totalW / 2;
+
+            heights.forEach((hRatio, idx) => {
+                const bh = size * hRatio;
+                const bx = startX + idx * (barW + gap);
+                const by = cy - bh / 2;
+                const r = barW / 2;
+                ctx.fillStyle = barColors[idx];
+                ctx.beginPath();
+                ctx.moveTo(bx + r, by);
+                ctx.lineTo(bx + barW - r, by);
+                ctx.quadraticCurveTo(bx + barW, by, bx + barW, by + r);
+                ctx.lineTo(bx + barW, by + bh - r);
+                ctx.quadraticCurveTo(bx + barW, by + bh, bx + barW - r, by + bh);
+                ctx.lineTo(bx + r, by + bh);
+                ctx.quadraticCurveTo(bx, by + bh, bx, by + bh - r);
+                ctx.lineTo(bx, by + r);
+                ctx.quadraticCurveTo(bx, by, bx + r, by);
+                ctx.closePath();
+                ctx.fill();
+            });
+
+            return canvas;
+        }
+
+        function canvasToPngBlob(canvas) {
+            return new Promise((resolve, reject) => {
+                if (canvas.toBlob) {
+                    canvas.toBlob((blob) => {
+                        if (blob) resolve(blob);
+                        else reject(new Error('Canvas PNG export failed.'));
+                    }, 'image/png');
+                } else {
+                    reject(new Error('canvas.toBlob is unavailable in this browser.'));
+                }
+            });
+        }
+
+        function downloadBlobFile(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+
+        function buildManifestJsonString() {
+            const manifest = {
+                id: './',
+                name: 'SonicLens — Audio Genre Analyzer',
+                short_name: 'SonicLens',
+                description: 'Pure musical & granular EDM subgenre analyzer with local acoustic DSP and offline history.',
+                start_url: './',
+                scope: './',
+                display: 'standalone',
+                orientation: 'portrait-primary',
+                background_color: '#0b0f19',
+                theme_color: '#0b0f19',
+                icons: [
+                    { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+                    { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+                    { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+                    { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+                ]
+            };
+            return JSON.stringify(manifest, null, 2);
+        }
+
+        function buildServiceWorkerJsString() {
+            return [
+                "const CACHE_NAME = 'soniclens-pwa-v1';",
+                "const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];",
+                "",
+                "self.addEventListener('install', (event) => {",
+                "  event.waitUntil(",
+                "    caches.open(CACHE_NAME).then((cache) =>",
+                "      Promise.allSettled(CORE_ASSETS.map((asset) => cache.add(asset)))",
+                "    )",
+                "  );",
+                "  self.skipWaiting();",
+                "});",
+                "",
+                "self.addEventListener('activate', (event) => {",
+                "  event.waitUntil(",
+                "    caches.keys().then((keys) =>",
+                "      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))",
+                "    ).then(() => self.clients.claim())",
+                "  );",
+                "});",
+                "",
+                "self.addEventListener('message', (event) => {",
+                "  if (event.data && event.data.type === 'SKIP_WAITING') {",
+                "    self.skipWaiting();",
+                "  }",
+                "});",
+                "",
+                "self.addEventListener('fetch', (event) => {",
+                "  const req = event.request;",
+                "  if (req.method !== 'GET') return;",
+                "",
+                "  const url = new URL(req.url);",
+                "",
+                "  // Network-only pass-through for Gemini API calls so AI requests are never cached or broken",
+                "  if (url.hostname === 'generativelanguage.googleapis.com') {",
+                "    return;",
+                "  }",
+                "",
+                "  // Only handle same-origin assets",
+                "  if (url.origin !== self.location.origin) return;",
+                "",
+                "  const isNavOrIndex =",
+                "    req.mode === 'navigate' ||",
+                "    url.pathname.endsWith('/') ||",
+                "    url.pathname.endsWith('/index.html');",
+                "",
+                "  if (isNavOrIndex) {",
+                "    // Network-first with cache fallback so GitHub Pages updates apply immediately",
+                "    event.respondWith(",
+                "      fetch(req)",
+                "        .then((res) => {",
+                "          if (res && res.ok) {",
+                "            const copy = res.clone();",
+                "            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));",
+                "          }",
+                "          return res;",
+                "        })",
+                "        .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html') || caches.match('./')))",
+                "    );",
+                "    return;",
+                "  }",
+                "",
+                "  // Cache-first for static icons & manifest",
+                "  event.respondWith(",
+                "    caches.match(req).then((cached) => {",
+                "      if (cached) return cached;",
+                "      return fetch(req).then((res) => {",
+                "        if (res && res.ok) {",
+                "          const copy = res.clone();",
+                "          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));",
+                "        }",
+                "        return res;",
+                "      });",
+                "    })",
+                "  );",
+                "});",
+                ""
+            ].join('\n');
+        }
+
+        function attachManifestLink(href) {
+            let link = document.querySelector('link[rel="manifest"]');
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'manifest';
+                document.head.appendChild(link);
+            }
+            link.href = href;
+        }
+
+        async function initPwaManifest() {
+            const isHttp = location.protocol === 'http:' || location.protocol === 'https:';
+            if (isHttp) {
+                try {
+                    const res = await fetch('./manifest.webmanifest', { method: 'HEAD', cache: 'no-store' });
+                    if (res.ok) {
+                        attachManifestLink('./manifest.webmanifest');
+                        state.pwaManifestMode = 'Hosted';
+                        updatePwaDiagnosticsUI();
+                        return;
+                    }
+                } catch {
+                    // Fall through cleanly to inline dynamic manifest
+                }
+            }
+
+            try {
+                const icon192Blob = await canvasToPngBlob(generateSonicLensIconCanvas(192));
+                const icon512Blob = await canvasToPngBlob(generateSonicLensIconCanvas(512));
+                const icon192Url = URL.createObjectURL(icon192Blob);
+                const icon512Url = URL.createObjectURL(icon512Blob);
+
+                const dynamicManifest = {
+                    id: './',
+                    name: 'SonicLens — Audio Genre Analyzer',
+                    short_name: 'SonicLens',
+                    start_url: './',
+                    scope: './',
+                    display: 'standalone',
+                    background_color: '#0b0f19',
+                    theme_color: '#0b0f19',
+                    icons: [
+                        { src: icon192Url, sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+                        { src: icon512Url, sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    ]
+                };
+                const manifestBlob = new Blob([JSON.stringify(dynamicManifest)], { type: 'application/manifest+json' });
+                attachManifestLink(URL.createObjectURL(manifestBlob));
+                state.pwaManifestMode = 'Inline Fallback';
+            } catch {
+                state.pwaManifestMode = 'Inline Fallback';
+            }
+            updatePwaDiagnosticsUI();
+        }
+
+        async function initServiceWorker() {
+            if (!('serviceWorker' in navigator)) {
+                state.pwaSwStatus = 'Unsupported';
+                updatePwaDiagnosticsUI();
+                return;
+            }
+            const isSecureHost =
+                location.protocol === 'https:' ||
+                location.hostname === 'localhost' ||
+                location.hostname === '127.0.0.1';
+
+            if (!isSecureHost) {
+                state.pwaSwStatus = 'Not Hosted Yet';
+                updatePwaDiagnosticsUI();
+                return;
+            }
+
+            try {
+                const headRes = await fetch('./sw.js', { method: 'HEAD', cache: 'no-store' });
+                if (!headRes.ok) {
+                    state.pwaSwStatus = 'Not Hosted Yet';
+                    updatePwaDiagnosticsUI();
+                    return;
+                }
+
+                const hadController = Boolean(navigator.serviceWorker.controller);
+                const reg = await navigator.serviceWorker.register('./sw.js', { scope: './' });
+                state.swRegistration = reg;
+                state.pwaSwStatus = reg.active ? 'Active' : 'Registered';
+                updatePwaDiagnosticsUI();
+
+                reg.addEventListener('updatefound', () => {
+                    const installing = reg.installing;
+                    if (!installing) return;
+                    installing.addEventListener('statechange', () => {
+                        if (installing.state === 'installed' && navigator.serviceWorker.controller) {
+                            els.swUpdateBanner.classList.remove('is-hidden');
+                        }
+                        if (installing.state === 'activated') {
+                            state.pwaSwStatus = 'Active';
+                            updatePwaDiagnosticsUI();
+                        }
+                    });
+                });
+
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    state.pwaSwStatus = 'Active';
+                    updatePwaDiagnosticsUI();
+                    if (hadController) {
+                        els.swUpdateBanner.classList.remove('is-hidden');
+                    }
+                });
+            } catch {
+                state.pwaSwStatus = 'Not Hosted Yet';
+                updatePwaDiagnosticsUI();
+            }
+        }
+
+        function updateOnlineStatus() {
+            state.isOnline = navigator.onLine !== false;
+            els.offlineBanner.classList.toggle('is-hidden', state.isOnline);
+            if (state.isOnline && !els.offlineAiCard.classList.contains('is-hidden')) {
+                showToast('Back online! Tap Retry AI Analysis to finish genre classification.', 'success');
+            }
+        }
+
+        function updatePwaDiagnosticsUI() {
+            const isHttps = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            const standalone = isStandaloneDisplayMode();
+
+            els.pwaDiagHttps.textContent = isHttps ? 'Active (HTTPS)' : 'Local / Non-HTTPS';
+            els.pwaDiagHttps.className = `pwa-diag-value ${isHttps ? 'ok' : 'warn'}`;
+
+            els.pwaDiagManifest.textContent = state.pwaManifestMode;
+            els.pwaDiagManifest.className = `pwa-diag-value ${state.pwaManifestMode === 'Hosted' ? 'ok' : 'info'}`;
+
+            els.pwaDiagSw.textContent = state.pwaSwStatus;
+            els.pwaDiagSw.className = `pwa-diag-value ${state.pwaSwStatus === 'Active' ? 'ok' : 'warn'}`;
+
+            els.pwaDiagDisplay.textContent = standalone ? 'Installed App' : 'Browser';
+            els.pwaDiagDisplay.className = `pwa-diag-value ${standalone ? 'ok' : 'info'}`;
+
+            if (standalone) {
+                els.pwaReadyBadge.textContent = 'Installed PWA';
+                els.btnInstallApp.classList.add('is-hidden');
+            } else if (isHttps && state.pwaManifestMode === 'Hosted' && state.pwaSwStatus === 'Active') {
+                els.pwaReadyBadge.textContent = 'PWA Ready';
+            } else {
+                els.pwaReadyBadge.textContent = 'Setup Kit';
+            }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            state.deferredInstallPrompt = e;
+            if (!isStandaloneDisplayMode()) {
+                els.btnInstallApp.classList.remove('is-hidden');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            state.deferredInstallPrompt = null;
+            els.btnInstallApp.classList.add('is-hidden');
+            updatePwaDiagnosticsUI();
+            showToast('SonicLens installed on your device!', 'success');
+        });
+
+        els.btnInstallApp.addEventListener('click', async () => {
+            if (!state.deferredInstallPrompt) return;
+            try {
+                state.deferredInstallPrompt.prompt();
+                const choice = await state.deferredInstallPrompt.userChoice;
+                if (choice && choice.outcome === 'accepted') {
+                    els.btnInstallApp.classList.add('is-hidden');
+                    showToast('Installing SonicLens...', 'success');
+                }
+                state.deferredInstallPrompt = null;
+            } catch {
+                state.deferredInstallPrompt = null;
+                els.btnInstallApp.classList.add('is-hidden');
+            }
+        });
+
+        els.btnSwReload.addEventListener('click', () => {
+            if (state.swRegistration && state.swRegistration.waiting) {
+                state.swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+            window.location.reload();
+        });
+
+        els.btnDlManifest.addEventListener('click', () => {
+            const blob = new Blob([buildManifestJsonString()], { type: 'application/manifest+json' });
+            downloadBlobFile(blob, 'manifest.webmanifest');
+            showToast('Downloaded manifest.webmanifest', 'success');
+        });
+
+        els.btnDlSw.addEventListener('click', () => {
+            const blob = new Blob([buildServiceWorkerJsString()], { type: 'application/javascript' });
+            downloadBlobFile(blob, 'sw.js');
+            showToast('Downloaded sw.js', 'success');
+        });
+
+        async function handleDownloadIcon(size) {
+            try {
+                const blob = await canvasToPngBlob(generateSonicLensIconCanvas(size));
+                downloadBlobFile(blob, `icon-${size}.png`);
+                showToast(`Downloaded icon-${size}.png`, 'success');
+            } catch (err) {
+                showToast(`Could not generate icon-${size}.png: ${err.message || err}`, 'error');
+            }
+        }
+
+        els.btnDlIcon192.addEventListener('click', () => handleDownloadIcon(192));
+        els.btnDlIcon512.addEventListener('click', () => handleDownloadIcon(512));
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // =====================================================
+        // 16. INITIALIZATION ON WINDOW LOAD
+        // =====================================================
         window.onload = function () {
             migrateSavedModelIfNeeded();
             state.history = loadHistory();
@@ -5200,6 +5839,10 @@
             refreshSettingsIndicator();
             updateLearningUI();
             updateNavBadges();
+            updateOnlineStatus();
+            initPwaManifest();
+            initServiceWorker();
+            updatePwaDiagnosticsUI();
             switchTab('analyze');
         };
     })();
