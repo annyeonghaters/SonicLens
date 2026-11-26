@@ -9,7 +9,8 @@
     <meta name="apple-mobile-web-app-title" content="SonicLens">
     <meta name="description" content="Pure audio-based music genre and EDM subgenre analyzer with local DSP, learning memory, and offline PWA support.">
     <title>SonicLens — Audio Genre &amp; EDM Subgenre Analyzer</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b0f19'/%3E%3Crect x='4' y='4' width='56' height='56' rx='13' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M18 36v-8m7 14V22m7 24V18m7 24V22m7 14v-8' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <!-- Full-bleed edge-to-edge inline SVG favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%231e1b4b'/%3E%3Cstop offset='52%25' stop-color='%230f172a'/%3E%3Cstop offset='100%25' stop-color='%230b0f19'/%3E%3C/linearGradient%3E%3CradialGradient id='glow' cx='50%25' cy='46%25' r='58%25'%3E%3Cstop offset='0%25' stop-color='%236366f1' stop-opacity='0.55'/%3E%3Cstop offset='55%25' stop-color='%2306b6d4' stop-opacity='0.22'/%3E%3Cstop offset='100%25' stop-color='%230b0f19' stop-opacity='0'/%3E%3C/radialGradient%3E%3ClinearGradient id='ring' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23818cf8'/%3E%3Cstop offset='100%25' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='0' y='0' width='64' height='64' fill='url(%23bg)'/%3E%3Crect x='0' y='0' width='64' height='64' fill='url(%23glow)'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='url(%23ring)' stroke-width='3.5'/%3E%3Cpath d='M18 37V27M25 43V21M32 47V17M39 43V21M46 37V27' stroke='%23ffffff' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E">
     <style>
         /* =========================================================
            1. GLOBAL RESET & DESIGN TOKENS
@@ -67,6 +68,7 @@
 
         button {
             cursor: pointer;
+            touch-action: manipulation;
         }
 
         /* =========================================================
@@ -81,17 +83,22 @@
         }
 
         #drawer-backdrop {
-            display: none;
             position: fixed;
             inset: 0;
             z-index: 9998;
             background: rgba(2, 6, 23, 0.72);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
         }
 
         #drawer-backdrop.open {
-            display: block;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
         }
 
         #nav-drawer {
@@ -106,6 +113,7 @@
             border-left: 1px solid #1e293b;
             transform: translateX(100%);
             visibility: hidden;
+            pointer-events: none;
             transition: transform 0.25s ease, visibility 0.25s ease;
             display: flex;
             flex-direction: column;
@@ -117,6 +125,7 @@
         #nav-drawer.open {
             transform: translateX(0);
             visibility: visible;
+            pointer-events: auto;
         }
 
         .modal-backdrop {
@@ -182,12 +191,20 @@
             width: 36px;
             height: 36px;
             border-radius: 10px;
-            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            background: #0b0f19;
+            overflow: hidden;
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.38);
+        }
+
+        .brand-logo svg {
+            display: block;
+            width: 100%;
+            height: 100%;
         }
 
         .brand-text {
@@ -211,6 +228,8 @@
         }
 
         .header-actions {
+            position: relative;
+            z-index: 20;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -219,6 +238,8 @@
 
         .icon-btn {
             position: relative;
+            z-index: 25;
+            pointer-events: auto;
             width: 44px;
             height: 44px;
             min-width: 44px;
@@ -247,6 +268,7 @@
             border-radius: 50%;
             background: var(--accent-emerald);
             box-shadow: 0 0 0 2px var(--bg-elevated);
+            pointer-events: none;
         }
 
         .nav-bar-wrap {
@@ -796,7 +818,7 @@
         .bar-fill-treble { background: #a855f7; }
 
         /* =========================================================
-           8. GENRE ROWS, VOTING, CHIPS, STARS
+           8. GENRE ROWS, VOTING, CHIPS, STARS & PWA ICON PREVIEW
            ========================================================= */
         .genre-row {
             padding: 11px 12px;
@@ -908,6 +930,37 @@
             background: rgba(245, 158, 11, 0.18);
             border-color: var(--accent-amber);
             color: #fbbf24;
+        }
+
+        .pwa-icon-preview-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 14px;
+            padding: 12px;
+            border-radius: 10px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .pwa-icon-preview-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pwa-icon-thumb {
+            width: 56px;
+            height: 56px;
+            display: block;
+            object-fit: cover;
+            border: 1px solid var(--border-strong);
+            background: #0b0f19;
+        }
+
+        .pwa-icon-thumb-circle {
+            border-radius: 50%;
         }
 
         /* =========================================================
@@ -1060,8 +1113,27 @@
         <div class="header-inner">
             <div class="brand">
                 <div class="brand-logo" aria-hidden="true">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round">
-                        <path d="M4 14v-4m4 8V6m4 14V4m4 14V6m4 8v-4"></path>
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="hdr-bg" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#1e1b4b"></stop>
+                                <stop offset="52%" stop-color="#0f172a"></stop>
+                                <stop offset="100%" stop-color="#0b0f19"></stop>
+                            </linearGradient>
+                            <radialGradient id="hdr-glow" cx="50%" cy="46%" r="58%">
+                                <stop offset="0%" stop-color="#6366f1" stop-opacity="0.6"></stop>
+                                <stop offset="55%" stop-color="#06b6d4" stop-opacity="0.24"></stop>
+                                <stop offset="100%" stop-color="#0b0f19" stop-opacity="0"></stop>
+                            </radialGradient>
+                            <linearGradient id="hdr-ring" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stop-color="#818cf8"></stop>
+                                <stop offset="100%" stop-color="#22d3ee"></stop>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="64" height="64" fill="url(#hdr-bg)"></rect>
+                        <rect x="0" y="0" width="64" height="64" fill="url(#hdr-glow)"></rect>
+                        <circle cx="32" cy="32" r="24" fill="none" stroke="url(#hdr-ring)" stroke-width="3.5"></circle>
+                        <path d="M18 37V27M25 43V21M32 47V17M39 43V21M46 37V27" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round"></path>
                     </svg>
                 </div>
                 <div class="brand-text">
@@ -1080,8 +1152,8 @@
                     <span>Install</span>
                 </button>
 
-                <button type="button" id="btn-menu-toggle" class="icon-btn" aria-label="Open Navigation Menu" aria-controls="nav-drawer" aria-expanded="false" title="Menu">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                <button type="button" id="btn-menu" class="icon-btn" aria-label="Open Navigation Menu" aria-controls="nav-drawer" aria-expanded="false" title="Menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="pointer-events:none;">
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -1637,6 +1709,22 @@
                     <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:12px;">
                         Upload these 4 files into the root of your GitHub repository alongside <code>index.html</code> for full Android installability and offline caching.
                     </p>
+                    <div class="pwa-icon-preview-row">
+                        <div class="pwa-icon-preview-item">
+                            <img id="pwa-icon-preview-square" class="pwa-icon-thumb" alt="Full-bleed square app icon preview">
+                            <div>
+                                <div style="font-size:0.78rem; font-weight:700; color:var(--text-primary);">Full-Bleed Square</div>
+                                <div style="font-size:0.72rem; color:var(--text-secondary);">Edge-to-edge, zero margin</div>
+                            </div>
+                        </div>
+                        <div class="pwa-icon-preview-item">
+                            <img id="pwa-icon-preview-circle" class="pwa-icon-thumb pwa-icon-thumb-circle" alt="Android circular maskable icon preview">
+                            <div>
+                                <div style="font-size:0.78rem; font-weight:700; color:var(--text-primary);">Android Adaptive Mask</div>
+                                <div style="font-size:0.72rem; color:var(--text-secondary);">Fills circular launcher cleanly</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="btn-row">
                         <button type="button" id="btn-dl-manifest" class="btn btn-sm">Download manifest.webmanifest</button>
                         <button type="button" id="btn-dl-sw" class="btn btn-sm">Download sw.js</button>
@@ -1667,7 +1755,7 @@
         <div class="drawer-header">
             <strong style="font-size:1rem;">Menu</strong>
             <button type="button" id="btn-drawer-close" class="icon-btn" aria-label="Close Menu" title="Close">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" style="pointer-events:none;">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -1732,7 +1820,7 @@
 
             <div style="margin-bottom:14px;">
                 <label for="input-api-key" class="field-label">Gemini API Key (saved locally in browser only)</label>
-                <input id="input-api-key" class="input" type="password" autocomplete="off" placeholder="Paste your Gemini API key (leave blank in Canvas)">
+                <input id="input-api-key" class="input" type="password" autocomplete="off" placeholder="Paste your Gemini API key (required for GitHub Pages)">
             </div>
 
             <div style="margin-bottom:14px;">
@@ -1784,6 +1872,185 @@
     <!-- TOAST -->
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+    <!-- =========================================================
+         DEDICATED, ISOLATED HAMBURGER MENU & VIEW NAVIGATION SCRIPT
+         Runs FIRST before any PWA, AudioContext, or localStorage code.
+         ========================================================= -->
+    <script>
+    (function () {
+        'use strict';
+
+        window.__sonicViewChangeCallbacks = window.__sonicViewChangeCallbacks || [];
+        window.__sonicSettingsOpenCallbacks = window.__sonicSettingsOpenCallbacks || [];
+
+        function getEl(id) {
+            return document.getElementById(id);
+        }
+
+        function openNavDrawer() {
+            var bd = getEl('drawer-backdrop');
+            var dr = getEl('nav-drawer');
+            var btn = getEl('btn-menu');
+            if (bd) {
+                bd.classList.add('open');
+                bd.setAttribute('aria-hidden', 'false');
+            }
+            if (dr) {
+                dr.classList.add('open');
+                dr.setAttribute('aria-hidden', 'false');
+            }
+            if (btn) {
+                btn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        function closeNavDrawer() {
+            var bd = getEl('drawer-backdrop');
+            var dr = getEl('nav-drawer');
+            var btn = getEl('btn-menu');
+            if (bd) {
+                bd.classList.remove('open');
+                bd.setAttribute('aria-hidden', 'true');
+            }
+            if (dr) {
+                dr.classList.remove('open');
+                dr.setAttribute('aria-hidden', 'true');
+            }
+            if (btn) {
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        function toggleNavDrawer() {
+            var dr = getEl('nav-drawer');
+            if (dr && dr.classList.contains('open')) {
+                closeNavDrawer();
+            } else {
+                openNavDrawer();
+            }
+        }
+
+        function switchSonicView(viewName) {
+            var views = ['analyze', 'genres', 'history', 'pwa'];
+            for (var i = 0; i < views.length; i++) {
+                var v = views[i];
+                var panel = getEl('view-' + v);
+                if (panel) panel.classList.toggle('active', v === viewName);
+            }
+
+            var tabAnalyze = getEl('tab-analyze');
+            var tabGenres = getEl('tab-genres');
+            if (tabAnalyze) tabAnalyze.classList.toggle('active', viewName === 'analyze');
+            if (tabGenres) tabGenres.classList.toggle('active', viewName === 'genres');
+
+            var drawer = getEl('nav-drawer');
+            if (drawer) {
+                var items = drawer.querySelectorAll('[data-drawer-view]');
+                for (var j = 0; j < items.length; j++) {
+                    items[j].classList.toggle('active', items[j].getAttribute('data-drawer-view') === viewName);
+                }
+            }
+
+            try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (_) { window.scrollTo(0, 0); }
+
+            for (var k = 0; k < window.__sonicViewChangeCallbacks.length; k++) {
+                try { window.__sonicViewChangeCallbacks[k](viewName); } catch (e) { console.warn('View callback error:', e); }
+            }
+        }
+
+        // Expose globally
+        window.openNavDrawer = openNavDrawer;
+        window.closeNavDrawer = closeNavDrawer;
+        window.toggleNavDrawer = toggleNavDrawer;
+        window.switchSonicView = switchSonicView;
+
+        // Direct DOM binding (marks event handled to prevent double-firing with delegation)
+        var btnMenu = getEl('btn-menu');
+        if (btnMenu) {
+            btnMenu.addEventListener('click', function (e) {
+                if (e.__sonicNavHandled) return;
+                e.__sonicNavHandled = true;
+                toggleNavDrawer();
+            });
+        }
+
+        var btnClose = getEl('btn-drawer-close');
+        if (btnClose) {
+            btnClose.addEventListener('click', function (e) {
+                if (e.__sonicNavHandled) return;
+                e.__sonicNavHandled = true;
+                closeNavDrawer();
+            });
+        }
+
+        var backdrop = getEl('drawer-backdrop');
+        if (backdrop) {
+            backdrop.addEventListener('click', function (e) {
+                if (e.__sonicNavHandled) return;
+                e.__sonicNavHandled = true;
+                closeNavDrawer();
+            });
+        }
+
+        // Document-level click delegation fallback so controls never fail to respond
+        document.addEventListener('click', function (e) {
+            if (e.__sonicNavHandled) return;
+            var target = e.target;
+            if (!target || !target.closest) return;
+
+            if (target.closest('#btn-menu')) {
+                e.__sonicNavHandled = true;
+                toggleNavDrawer();
+                return;
+            }
+            if (target.closest('#btn-drawer-close') || target.id === 'drawer-backdrop') {
+                e.__sonicNavHandled = true;
+                closeNavDrawer();
+                return;
+            }
+            var drawerViewBtn = target.closest('[data-drawer-view]');
+            if (drawerViewBtn) {
+                e.__sonicNavHandled = true;
+                var view = drawerViewBtn.getAttribute('data-drawer-view');
+                closeNavDrawer();
+                if (view) switchSonicView(view);
+                return;
+            }
+            if (target.closest('#btn-drawer-settings')) {
+                e.__sonicNavHandled = true;
+                closeNavDrawer();
+                var modal = getEl('settings-modal');
+                if (modal) modal.classList.add('open');
+                for (var i = 0; i < window.__sonicSettingsOpenCallbacks.length; i++) {
+                    try { window.__sonicSettingsOpenCallbacks[i](); } catch (err) { console.warn('Settings open cb error:', err); }
+                }
+                return;
+            }
+            var tabBtn = target.closest('.nav-tab[data-view]');
+            if (tabBtn) {
+                e.__sonicNavHandled = true;
+                var tabView = tabBtn.getAttribute('data-view');
+                if (tabView) switchSonicView(tabView);
+            }
+        });
+
+        // Escape key closes drawer and modals
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeNavDrawer();
+                var sm = getEl('settings-modal');
+                var cm = getEl('clear-history-modal');
+                if (sm) sm.classList.remove('open');
+                if (cm) cm.classList.remove('open');
+            }
+        });
+    })();
+    </script>
+
+    <!-- =========================================================
+         MAIN SONICLENS APPLICATION SCRIPT
+         Each subsystem is isolated in try/catch blocks.
+         ========================================================= -->
     <script>
     (function () {
         'use strict';
@@ -2087,7 +2354,9 @@
                 if (!VALID_MODELS.includes(raw) || /^gemini-2\./i.test(raw) || raw === 'gemini-3-flash-preview') {
                     localStorage.setItem(LS_KEY_MODEL, 'auto');
                 }
-            } catch (_) {}
+            } catch (e) {
+                console.warn('Model migration skipped:', e);
+            }
         }
 
         function getSavedApiKey() {
@@ -2116,7 +2385,9 @@
         function saveHistory(arr) {
             try {
                 localStorage.setItem(LS_KEY_HISTORY, JSON.stringify(arr.slice(0, 120)));
-            } catch (_) {}
+            } catch (e) {
+                console.warn('History save failed:', e);
+            }
         }
 
         function defaultLearningMemory() {
@@ -2148,7 +2419,9 @@
         function saveLearningMemory(mem) {
             try {
                 localStorage.setItem(LS_KEY_LEARNING, JSON.stringify(mem));
-            } catch (_) {}
+            } catch (e) {
+                console.warn('Learning save failed:', e);
+            }
         }
 
         // =========================================================
@@ -2195,32 +2468,8 @@
         };
 
         // =========================================================
-        // 5. NAVIGATION: TABS, HAMBURGER DRAWER & MODALS
+        // 5. MODAL HELPERS & VIEW CALLBACK REGISTRATION
         // =========================================================
-        function openDrawer() {
-            const bd = $('drawer-backdrop');
-            const dr = $('nav-drawer');
-            const btn = $('btn-menu-toggle');
-            if (bd) { bd.classList.add('open'); bd.setAttribute('aria-hidden', 'false'); }
-            if (dr) { dr.classList.add('open'); dr.setAttribute('aria-hidden', 'false'); }
-            if (btn) btn.setAttribute('aria-expanded', 'true');
-        }
-
-        function closeDrawer() {
-            const bd = $('drawer-backdrop');
-            const dr = $('nav-drawer');
-            const btn = $('btn-menu-toggle');
-            if (bd) { bd.classList.remove('open'); bd.setAttribute('aria-hidden', 'true'); }
-            if (dr) { dr.classList.remove('open'); dr.setAttribute('aria-hidden', 'true'); }
-            if (btn) btn.setAttribute('aria-expanded', 'false');
-        }
-
-        function toggleDrawer() {
-            const dr = $('nav-drawer');
-            if (dr && dr.classList.contains('open')) closeDrawer();
-            else openDrawer();
-        }
-
         function openModal(id) {
             const el = $(id);
             if (el) el.classList.add('open');
@@ -2233,94 +2482,66 @@
 
         function switchView(viewName) {
             state.activeView = viewName;
-            ['analyze', 'genres', 'history', 'pwa'].forEach((v) => {
-                const panel = $(`view-${v}`);
-                if (panel) panel.classList.toggle('active', v === viewName);
-            });
-
-            const tabAnalyze = $('tab-analyze');
-            const tabGenres = $('tab-genres');
-            if (tabAnalyze) tabAnalyze.classList.toggle('active', viewName === 'analyze');
-            if (tabGenres) tabGenres.classList.toggle('active', viewName === 'genres');
-
-            const drawer = $('nav-drawer');
-            if (drawer) {
-                drawer.querySelectorAll('[data-drawer-view]').forEach((btn) => {
-                    btn.classList.toggle('active', btn.dataset.drawerView === viewName);
-                });
+            if (typeof window.switchSonicView === 'function') {
+                window.switchSonicView(viewName);
             }
+        }
 
+        // Register view-change hook with the isolated navigation script
+        window.__sonicViewChangeCallbacks.push((viewName) => {
+            state.activeView = viewName;
             if (viewName === 'genres') renderGenreDirectory();
             if (viewName === 'history') renderHistoryView();
             if (viewName === 'pwa') updatePwaDiagnostics();
             if (viewName === 'analyze') requestAnimationFrame(resizeVizCanvas);
-            window.scrollTo({ top: 0, behavior: 'instant' });
-        }
-
-        on('btn-menu-toggle', 'click', toggleDrawer);
-        on('btn-drawer-close', 'click', closeDrawer);
-        on('drawer-backdrop', 'click', closeDrawer);
-
-        on('tab-analyze', 'click', () => switchView('analyze'));
-        on('tab-genres', 'click', () => switchView('genres'));
-
-        const navDrawerEl = $('nav-drawer');
-        if (navDrawerEl) {
-            navDrawerEl.querySelectorAll('[data-drawer-view]').forEach((btn) => {
-                btn.addEventListener('click', () => {
-                    const target = btn.dataset.drawerView;
-                    closeDrawer();
-                    switchView(target);
-                });
-            });
-        }
-
-        on('btn-drawer-settings', 'click', () => {
-            closeDrawer();
-            openSettingsModal();
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDrawer();
-                closeModal('settings-modal');
-                closeModal('clear-history-modal');
-            }
+        // Register settings-open hook
+        window.__sonicSettingsOpenCallbacks.push(() => {
+            populateSettingsModal();
         });
 
         // =========================================================
         // 6. SETTINGS MODAL & LEARNING SUMMARY UI
         // =========================================================
         function updateBadgesAndKeyStatus() {
-            const hasKey = Boolean(getSavedApiKey());
-            safeShow('header-key-dot', hasKey);
-            safeShow('drawer-key-badge', hasKey);
+            try {
+                const hasKey = Boolean(getSavedApiKey());
+                safeShow('header-key-dot', hasKey);
+                safeShow('drawer-key-badge', hasKey);
 
-            const matchedCount = computeMatchedGenreMap().matchedCanonicalCount;
-            const totalCount = GENRE_TAXONOMY.length;
-            safeSetText('tab-genres-badge', `${matchedCount}/${totalCount}`);
-            safeSetText('drawer-genres-badge', `${matchedCount}/${totalCount}`);
-            safeSetText('drawer-history-badge', String(state.history.length));
+                const matchedCount = computeMatchedGenreMap().matchedCanonicalCount;
+                const totalCount = GENRE_TAXONOMY.length;
+                safeSetText('tab-genres-badge', `${matchedCount}/${totalCount}`);
+                safeSetText('drawer-genres-badge', `${matchedCount}/${totalCount}`);
+                safeSetText('drawer-history-badge', String(state.history.length));
 
-            const rated = state.learning.ratedTracksCount || 0;
-            const posTotal = Object.values(state.learning.positiveGenres || {}).reduce((a, b) => a + b, 0);
-            const negTotal = Object.values(state.learning.negativeGenres || {}).reduce((a, b) => a + b, 0);
+                const rated = state.learning.ratedTracksCount || 0;
+                const posTotal = Object.values(state.learning.positiveGenres || {}).reduce((a, b) => a + b, 0);
+                const negTotal = Object.values(state.learning.negativeGenres || {}).reduce((a, b) => a + b, 0);
 
-            if (rated > 0 || posTotal > 0 || negTotal > 0) {
-                safeSetText('pill-learning-status', `Learning Active (${rated} rated • ${posTotal + negTotal} votes)`);
-            } else {
-                safeSetText('pill-learning-status', 'Learning Ready (0 rated)');
+                if (rated > 0 || posTotal > 0 || negTotal > 0) {
+                    safeSetText('pill-learning-status', `Learning Active (${rated} rated • ${posTotal + negTotal} votes)`);
+                } else {
+                    safeSetText('pill-learning-status', 'Learning Ready (0 rated)');
+                }
+                safeSetText('settings-learning-summary', `${rated} rated tracks • ${posTotal} 👍 positive votes • ${negTotal} 👎 negative votes • ${(state.learning.recentNotes || []).length} notes`);
+            } catch (e) {
+                console.warn('Badge update error:', e);
             }
-            safeSetText('settings-learning-summary', `${rated} rated tracks • ${posTotal} 👍 positive votes • ${negTotal} 👎 negative votes • ${(state.learning.recentNotes || []).length} notes`);
         }
 
-        function openSettingsModal() {
+        function populateSettingsModal() {
             const keyIn = $('input-api-key');
             const modSel = $('select-model');
             if (keyIn) keyIn.value = getSavedApiKey();
             if (modSel) modSel.value = getSavedModel();
             safeShow('test-key-output', false);
             updateBadgesAndKeyStatus();
+        }
+
+        function openSettingsModal() {
+            populateSettingsModal();
             openModal('settings-modal');
         }
 
@@ -2471,7 +2692,6 @@
                 safeShow('mic-card', true);
                 safeSetText('mic-timer', '00:00 / 00:30');
 
-                // Live waveform visualizer for mic
                 const AC = window.AudioContext || window.webkitAudioContext;
                 state.micAudioCtx = new AC();
                 const src = state.micAudioCtx.createMediaStreamSource(stream);
@@ -2564,7 +2784,9 @@
                 state.analyser.fftSize = 1024;
                 state.mediaSource.connect(state.analyser);
                 state.analyser.connect(state.audioCtx.destination);
-            } catch (_) {}
+            } catch (e) {
+                console.warn('Player analyser setup skipped:', e);
+            }
         }
 
         function resizeVizCanvas() {
@@ -2735,7 +2957,6 @@
             const ch0 = audioBuffer.getChannelData(0);
             const ch1 = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : null;
 
-            // Downmix to mono (up to 45s centered or full)
             const maxSamples = Math.min(len, Math.floor(sr * 45));
             const startOffset = Math.max(0, Math.floor((len - maxSamples) / 2));
             const mono = new Float32Array(maxSamples);
@@ -2758,7 +2979,7 @@
             const percussiveness = Math.min(100, Math.max(5, Math.round(zcrRate * 480)));
 
             // BPM via onset energy flux + autocorrelation (70–185 BPM)
-            const hop = Math.max(256, Math.floor(sr / 100)); // ~100 frames/sec
+            const hop = Math.max(256, Math.floor(sr / 100));
             const frameCount = Math.floor(maxSamples / hop);
             const energies = new Float32Array(frameCount);
             for (let f = 0; f < frameCount; f++) {
@@ -2923,7 +3144,6 @@
             const ch0 = audioBuffer.getChannelData(0);
             const ch1 = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : null;
 
-            // Find highest-energy 20s window using 1-second RMS blocks
             const totalSec = Math.floor(audioBuffer.duration);
             let bestStartSec = 0;
             if (totalSec > 20) {
@@ -2952,7 +3172,6 @@
                 }
             }
 
-            // Linear resample to 16kHz mono PCM16
             const outSamples = Math.max(1, Math.floor(clipSec * targetSr));
             const ratio = srcSr / targetSr;
             const startSample = Math.floor(bestStartSec * srcSr);
@@ -2968,8 +3187,8 @@
             writeStr(8, 'WAVE');
             writeStr(12, 'fmt ');
             view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true); // PCM
-            view.setUint16(22, 1, true); // Mono
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 1, true);
             view.setUint32(24, targetSr, true);
             view.setUint32(28, targetSr * 2, true);
             view.setUint16(32, 2, true);
@@ -3061,7 +3280,7 @@
                             continue;
                         }
                         if (res.status === 404 || res.status === 400) {
-                            break; // try next model in chain
+                            break;
                         }
                         throw lastError;
                     } catch (err) {
@@ -3145,7 +3364,6 @@
                 return;
             }
 
-            // Step 2 & 3: Decode, Local DSP, and Peak-Energy 20s 16kHz Mono WAV
             setPipelineStep(2, 'active', 'Decoding & finding peak-energy 20s clip...');
             try {
                 const audioBuffer = await decodeAudioBufferSafe(arrayBuffer);
@@ -3163,7 +3381,6 @@
                 state.encodedMimeType = 'audio/wav';
                 safeSetText('player-meta', `${state.currentSourceLabel} • Peak ${encoded.clipSec}s @ ${encoded.windowStartSec}s (16kHz Mono WAV)`);
             } catch (decodeErr) {
-                // Fallback for tricky mobile codecs (<12MB)
                 if (blob.size <= 12 * 1024 * 1024) {
                     try {
                         state.encodedAudioBase64 = await blobToBase64Safe(blob);
@@ -3294,7 +3511,6 @@
                     }
                 });
 
-                // Client-side pure musical safeguard
                 data.main_genres = filterAndNormalizeGenres(data.main_genres, 5);
                 if (data.edm_analysis) {
                     data.edm_analysis.subgenres = filterAndNormalizeGenres(data.edm_analysis.subgenres, 6);
@@ -3355,7 +3571,6 @@
             safeSetText('ai-model-badge', ai.modelUsed || 'Gemini');
             const votes = getTrackVoteMap();
 
-            // Main Genres
             const mainHtml = (ai.main_genres || []).map((g) => {
                 const v = votes[g.name] || 0;
                 return `
@@ -3379,7 +3594,6 @@
             }).join('');
             safeSetHTML('main-genres-list', mainHtml || '<p style="font-size:0.84rem; color:var(--text-secondary);">No main genres returned.</p>');
 
-            // EDM Deep-Dive
             const edm = ai.edm_analysis || {};
             const edmPct = Math.min(100, Math.max(0, Number(edm.edm_influence_pct) || 0));
             safeSetText('edm-family-badge', edm.primary_edm_family || 'Electronic Elements');
@@ -3428,7 +3642,6 @@
             safeSetText('edm-el-synths', el.synths_leads || '—');
             safeSetText('edm-el-drop', el.drop_arrangement || '—');
 
-            // Musical Elements
             safeSetHTML('ai-instruments', (ai.instruments || []).map((x) => `<span class="chip">${escapeHtml(x)}</span>`).join(''));
             safeSetHTML('ai-moods', (ai.moods || []).map((x) => `<span class="chip">${escapeHtml(x)}</span>`).join(''));
             safeSetText('ai-rhythm', ai.rhythm_notes || '—');
@@ -3436,7 +3649,6 @@
             safeSetText('ai-production', ai.production_notes || '—');
             safeSetText('ai-reasoning', ai.sonic_reasoning || '—');
 
-            // Probe availability & saved feedback restore
             const hasAudio = Boolean(state.encodedAudioBase64);
             safeShow('probe-no-audio-note', !hasAudio);
             const probeBtn = $('btn-run-probe');
@@ -3448,7 +3660,6 @@
             safeShow('ai-results-section', true);
         }
 
-        // Delegate 👍 / 👎 vote clicks inside #ai-results-section
         on('ai-results-section', 'click', (e) => {
             const btn = e.target.closest('[data-vote-genre]');
             if (!btn) return;
@@ -3477,13 +3688,12 @@
             showToast(next === 1 ? `Confirmed "${genreName}"` : next === -1 ? `Flagged "${genreName}" as over-predicted` : `Cleared vote for "${genreName}"`);
         });
 
-        // Copy Full Report
         on('btn-copy-report', 'click', () => {
             if (!state.currentAi) return;
             const ai = state.currentAi;
             const edm = ai.edm_analysis || {};
             const lines = [
-                `SonicLens Pure Musical Analysis Report`,
+                'SonicLens Pure Musical Analysis Report',
                 `Track: ${state.currentTrackTitle}`,
                 state.currentDsp ? `Local DSP: ${state.currentDsp.bpm} BPM | Brightness ${state.currentDsp.spectralCentroidHz} Hz | Bass ${state.currentDsp.bassPct}% / Mid ${state.currentDsp.midPct}% / Treble ${state.currentDsp.treblePct}%` : '',
                 '',
@@ -3502,7 +3712,6 @@
             showToast('Full report copied to clipboard');
         });
 
-        // Subgenre Probe
         on('btn-run-probe', 'click', async () => {
             const input = $('input-probe-genre');
             const target = input ? input.value.trim() : '';
@@ -3583,7 +3792,6 @@
                 }
             }
 
-            // Record positive learning signal
             state.learning.positiveGenres[finalName] = (state.learning.positiveGenres[finalName] || 0) + 1;
             saveLearningMemory(state.learning);
 
@@ -3606,7 +3814,6 @@
             if (inp) inp.value = '';
         });
 
-        // Ask for More Genre Suggestions
         on('btn-ask-suggestions', 'click', async () => {
             if (!state.encodedAudioBase64 || !state.currentAi) return;
             if (!navigator.onLine) { showToast('Offline — reconnect for AI suggestions.'); return; }
@@ -3677,7 +3884,6 @@
             btn.textContent = 'Added';
         });
 
-        // Rate & Teach SonicLens
         function updateStarButtons(n) {
             state.selectedStar = n;
             const wrap = $('rating-stars');
@@ -3973,7 +4179,6 @@
                     || trackTitles.includes(q);
             });
 
-            // Group by category
             const grouped = {};
             filtered.forEach((g) => {
                 if (!grouped[g.category]) grouped[g.category] = [];
@@ -4011,7 +4216,6 @@
                 </div>
             `).join('');
 
-            // Other Discovered Genres
             const filteredDiscovered = discovered.filter((name) => {
                 const tracks = map[name.toLowerCase()] || [];
                 if (!q) return true;
@@ -4090,37 +4294,89 @@
             c.width = size;
             c.height = size;
             const ctx = c.getContext('2d');
-            ctx.fillStyle = '#0b0f19';
+
+            // 1. Full-bleed edge-to-edge background gradient (zero outer padding, zero transparency)
+            const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+            bgGrad.addColorStop(0, '#1e1b4b');
+            bgGrad.addColorStop(0.52, '#0f172a');
+            bgGrad.addColorStop(1, '#0b0f19');
+            ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, size, size);
 
-            const pad = size * 0.08;
-            const r = size * 0.22;
-            const g = ctx.createLinearGradient(0, 0, size, size);
-            g.addColorStop(0, '#6366f1');
-            g.addColorStop(1, '#06b6d4');
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.roundRect(pad, pad, size - pad * 2, size - pad * 2, r);
-            ctx.fill();
+            // 2. Centered radial indigo-to-cyan glow across full canvas
+            const glow = ctx.createRadialGradient(
+                size * 0.5, size * 0.46, size * 0.04,
+                size * 0.5, size * 0.5, size * 0.62
+            );
+            glow.addColorStop(0, 'rgba(99, 102, 241, 0.58)');
+            glow.addColorStop(0.52, 'rgba(6, 182, 212, 0.24)');
+            glow.addColorStop(1, 'rgba(11, 15, 25, 0)');
+            ctx.fillStyle = glow;
+            ctx.fillRect(0, 0, size, size);
 
+            // 3. SonicLens outer halo & lens ring (~76% of canvas for Android maskable safe zone)
+            const cx = size * 0.5;
+            const cy = size * 0.5;
+            const ringRadius = size * 0.375;
+
+            ctx.save();
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.28)';
+            ctx.lineWidth = size * 0.085;
+            ctx.beginPath();
+            ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const ringGrad = ctx.createLinearGradient(cx - ringRadius, cy - ringRadius, cx + ringRadius, cy + ringRadius);
+            ringGrad.addColorStop(0, '#818cf8');
+            ringGrad.addColorStop(0.5, '#38bdf8');
+            ringGrad.addColorStop(1, '#22d3ee');
+            ctx.strokeStyle = ringGrad;
+            ctx.lineWidth = size * 0.052;
+            ctx.beginPath();
+            ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // 4. Acoustic equalizer bars scaled cleanly inside the lens ring
+            ctx.save();
             ctx.strokeStyle = '#ffffff';
             ctx.lineCap = 'round';
             ctx.lineWidth = size * 0.068;
-            const heights = [0.22, 0.42, 0.56, 0.42, 0.22];
-            const spacing = size * 0.125;
-            const startX = size * 0.5 - spacing * 2;
+            ctx.shadowColor = 'rgba(6, 182, 212, 0.45)';
+            ctx.shadowBlur = size * 0.04;
+
+            const heights = [0.18, 0.36, 0.50, 0.36, 0.18];
+            const spacing = size * 0.115;
+            const startX = cx - spacing * 2;
             heights.forEach((hFrac, idx) => {
                 const x = startX + idx * spacing;
                 const half = (size * hFrac) / 2;
                 ctx.beginPath();
-                ctx.moveTo(x, size * 0.5 - half);
-                ctx.lineTo(x, size * 0.5 + half);
+                ctx.moveTo(x, cy - half);
+                ctx.lineTo(x, cy + half);
                 ctx.stroke();
             });
+            ctx.restore();
+
             return c;
         }
 
+        function updatePwaIconPreviews() {
+            try {
+                const sq = $('pwa-icon-preview-square');
+                const ci = $('pwa-icon-preview-circle');
+                if (!sq && !ci) return;
+                const dataUrl = generateIconCanvas(192).toDataURL('image/png');
+                if (sq) sq.src = dataUrl;
+                if (ci) ci.src = dataUrl;
+            } catch (e) {
+                console.warn('PWA icon preview skipped:', e);
+            }
+        }
+
         function buildManifestString(icon192Url, icon512Url) {
+            const src192 = icon192Url || './icon-192.png';
+            const src512 = icon512Url || './icon-512.png';
             return JSON.stringify({
                 name: 'SonicLens — Audio Genre & EDM Analyzer',
                 short_name: 'SonicLens',
@@ -4131,122 +4387,127 @@
                 background_color: '#0b0f19',
                 theme_color: '#0b0f19',
                 icons: [
-                    { src: icon192Url || './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-                    { src: icon512Url || './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+                    { src: src192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+                    { src: src192, sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+                    { src: src512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+                    { src: src512, sizes: '512x512', type: 'image/png', purpose: 'maskable' }
                 ]
             }, null, 2);
         }
 
         function buildSwJsString() {
-            return `const CACHE_NAME = 'soniclens-pwa-v3';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
-
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(() => {}));
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
-  );
-  self.clients.claim();
-});
-
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
-});
-
-self.addEventListener('fetch', (event) => {
-  const url = event.request.url || '';
-  if (event.request.method !== 'GET' || url.includes('generativelanguage.googleapis.com')) return;
-  event.respondWith(
-    fetch(event.request)
-      .then((res) => {
-        if (res && res.status === 200) {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((c) => c.put(event.request, clone)).catch(() => {});
-        }
-        return res;
-      })
-      .catch(() => caches.match(event.request).then((r) => r || caches.match('./index.html')))
-  );
-});
-`;
+            return [
+                "const CACHE_NAME = 'soniclens-v5';",
+                "const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];",
+                "",
+                "self.addEventListener('install', (event) => {",
+                "    event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)).catch(() => {}));",
+                "    self.skipWaiting();",
+                "});",
+                "",
+                "self.addEventListener('activate', (event) => {",
+                "    event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))));",
+                "    self.clients.claim();",
+                "});",
+                "",
+                "self.addEventListener('fetch', (event) => {",
+                "    const req = event.request;",
+                "    if (req.method !== 'GET') return;",
+                "    if (req.url.includes('generativelanguage.googleapis.com')) return;",
+                "    event.respondWith(",
+                "        caches.match(req).then((cached) => {",
+                "            const netFetch = fetch(req).then((res) => {",
+                "                if (res && res.status === 200 && res.type === 'basic') {",
+                "                    const clone = res.clone();",
+                "                    caches.open(CACHE_NAME).then((c) => c.put(req, clone)).catch(() => {});",
+                "                }",
+                "                return res;",
+                "            }).catch(() => cached);",
+                "            return cached || netFetch;",
+                "        })",
+                "    );",
+                "});"
+            ].join('\n');
         }
 
-        async function initPwaSystem() {
-            const isSecure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        function updatePwaDiagnostics() {
+            try {
+                const isSecure = window.isSecureContext || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+                const swActive = Boolean(navigator.serviceWorker && navigator.serviceWorker.controller);
 
-            // Smart manifest loader: check ./manifest.webmanifest first, else Blob fallback
-            let hostedOk = false;
-            if (isSecure) {
-                try {
-                    const res = await fetch('./manifest.webmanifest', { cache: 'no-store' });
-                    if (res.ok) {
-                        const link = document.createElement('link');
-                        link.rel = 'manifest';
-                        link.href = './manifest.webmanifest';
-                        document.head.appendChild(link);
-                        hostedOk = true;
-                        state.manifestMode = 'Hosted File';
-                    }
-                } catch (_) {}
+                safeSetText('diag-https', isSecure ? 'Active (HTTPS)' : 'Local / HTTP');
+                safeSetText('diag-manifest', state.manifestMode);
+                safeSetText('diag-sw', swActive ? 'Active' : (state.swRegistration ? 'Registered' : 'Not Registered'));
+                safeSetText('diag-display', isStandalone ? 'Standalone App' : 'Browser Tab');
+
+                const ready = isSecure && swActive && state.manifestMode === 'Hosted File';
+                safeSetText('pwa-overall-pill', isStandalone ? 'Installed' : (ready ? 'Install Ready' : 'Kit Available'));
+                safeSetText('drawer-pwa-badge', isStandalone ? 'Installed' : (ready ? 'Ready' : 'Setup'));
+                updatePwaIconPreviews();
+            } catch (e) {
+                console.warn('PWA diagnostics error:', e);
             }
+        }
 
-            if (!hostedOk) {
-                try {
-                    const i192 = generateIconCanvas(192).toDataURL('image/png');
-                    const i512 = generateIconCanvas(512).toDataURL('image/png');
-                    const blob = new Blob([buildManifestString(i192, i512)], { type: 'application/manifest+json' });
+        async function initPwaSubsystem() {
+            try {
+                const isHttp = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                let hostedManifestOk = false;
+
+                if (isHttp) {
+                    try {
+                        const res = await fetch('./manifest.webmanifest', { cache: 'no-store' });
+                        if (res.ok) {
+                            const link = document.createElement('link');
+                            link.rel = 'manifest';
+                            link.href = './manifest.webmanifest';
+                            document.head.appendChild(link);
+                            hostedManifestOk = true;
+                            state.manifestMode = 'Hosted File';
+                        }
+                    } catch (_) {}
+                }
+
+                if (!hostedManifestOk) {
+                    const icon192 = generateIconCanvas(192).toDataURL('image/png');
+                    const icon512 = generateIconCanvas(512).toDataURL('image/png');
+                    const blob = new Blob([buildManifestString(icon192, icon512)], { type: 'application/manifest+json' });
                     const link = document.createElement('link');
                     link.rel = 'manifest';
                     link.href = URL.createObjectURL(blob);
                     document.head.appendChild(link);
-                    state.manifestMode = 'Inline Blob';
-                } catch (_) {
-                    state.manifestMode = 'Unavailable';
+                    state.manifestMode = 'Dynamic Blob';
                 }
-            }
 
-            // Service worker registration over HTTPS/localhost
-            if (isSecure && 'serviceWorker' in navigator) {
-                try {
-                    const reg = await navigator.serviceWorker.register('./sw.js');
-                    state.swRegistration = reg;
-                    reg.addEventListener('updatefound', () => {
-                        const nw = reg.installing;
-                        if (!nw) return;
-                        nw.addEventListener('statechange', () => {
-                            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-                                safeShow('banner-sw-update', true);
-                            }
+                if (isHttp && 'serviceWorker' in navigator) {
+                    try {
+                        const reg = await navigator.serviceWorker.register('./sw.js');
+                        state.swRegistration = reg;
+                        reg.addEventListener('updatefound', () => {
+                            const nw = reg.installing;
+                            if (!nw) return;
+                            nw.addEventListener('statechange', () => {
+                                if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                                    safeShow('banner-sw-update', true);
+                                }
+                            });
                         });
-                    });
-                } catch (_) {}
+                    } catch (swErr) {
+                        console.warn('SW registration skipped:', swErr);
+                    }
+                }
+            } catch (e) {
+                console.warn('PWA init skipped:', e);
+            } finally {
+                updatePwaDiagnostics();
             }
-            updatePwaDiagnostics();
-        }
-
-        function updatePwaDiagnostics() {
-            const isSecure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-            const swActive = Boolean(state.swRegistration || (navigator.serviceWorker && navigator.serviceWorker.controller));
-
-            safeSetText('diag-https', isSecure ? 'Active' : 'Local File');
-            safeSetText('diag-manifest', state.manifestMode);
-            safeSetText('diag-sw', swActive ? 'Registered' : 'Not Active');
-            safeSetText('diag-display', isStandalone ? 'Standalone App' : 'Browser Tab');
-
-            const ready = isSecure && swActive && state.manifestMode === 'Hosted File';
-            safeSetText('pwa-overall-pill', isStandalone ? 'Installed' : (ready ? 'Install Ready' : 'Kit Available'));
-            safeSetText('drawer-pwa-badge', isStandalone ? 'Installed' : (ready ? 'Ready' : 'Setup'));
         }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             state.deferredInstallPrompt = e;
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
             if (!isStandalone) safeShow('btn-pwa-install', true);
         });
 
@@ -4267,12 +4528,7 @@ self.addEventListener('fetch', (event) => {
             safeShow('btn-pwa-install', false);
         });
 
-        on('btn-sw-reload', 'click', () => {
-            if (state.swRegistration && state.swRegistration.waiting) {
-                state.swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
-            }
-            window.location.reload();
-        });
+        on('btn-sw-reload', 'click', () => window.location.reload());
 
         on('btn-dl-manifest', 'click', () => {
             downloadBlob(new Blob([buildManifestString()], { type: 'application/manifest+json' }), 'manifest.webmanifest');
@@ -4280,41 +4536,65 @@ self.addEventListener('fetch', (event) => {
         });
         on('btn-dl-sw', 'click', () => {
             downloadBlob(new Blob([buildSwJsString()], { type: 'application/javascript' }), 'sw.js');
-            showToast('Downloaded sw.js');
+            showToast('Downloaded sw.js (soniclens-v5)');
         });
         on('btn-dl-icon-192', 'click', () => {
             generateIconCanvas(192).toBlob((b) => {
-                if (b) downloadBlob(b, 'icon-192.png');
-                showToast('Downloaded icon-192.png');
+                if (b) { downloadBlob(b, 'icon-192.png'); showToast('Downloaded full-bleed icon-192.png'); }
             }, 'image/png');
         });
         on('btn-dl-icon-512', 'click', () => {
             generateIconCanvas(512).toBlob((b) => {
-                if (b) downloadBlob(b, 'icon-512.png');
-                showToast('Downloaded icon-512.png');
+                if (b) { downloadBlob(b, 'icon-512.png'); showToast('Downloaded full-bleed icon-512.png'); }
             }, 'image/png');
         });
 
+        // =========================================================
+        // 17. ONLINE / OFFLINE DETECTION & ISOLATED BOOTSTRAP
+        // =========================================================
         function updateOnlineStatus() {
-            safeShow('banner-offline', !navigator.onLine);
+            const offline = !navigator.onLine;
+            safeShow('banner-offline', offline);
         }
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
 
-        // =========================================================
-        // 17. INITIALIZATION
-        // =========================================================
-        function populateTaxonomyDatalist() {
+        window.addEventListener('online', () => {
+            updateOnlineStatus();
+            showToast('Back online');
+        });
+        window.addEventListener('offline', () => {
+            updateOnlineStatus();
+            showToast('Offline Mode — local DSP & History remain available');
+        });
+
+        // Isolated startup blocks
+        try {
+            migrateSavedModelIfNeeded();
+        } catch (e) {
+            console.warn('Model migration error:', e);
+        }
+
+        try {
             const dl = $('taxonomy-datalist');
-            if (!dl) return;
-            dl.innerHTML = GENRE_TAXONOMY.map((g) => `<option value="${escapeHtml(g.name)}"></option>`).join('');
+            if (dl) {
+                dl.innerHTML = GENRE_TAXONOMY.map((g) => `<option value="${escapeHtml(g.name)}"></option>`).join('');
+            }
+        } catch (e) {
+            console.warn('Datalist populate error:', e);
         }
 
-        migrateSavedModelIfNeeded();
-        populateTaxonomyDatalist();
-        updateOnlineStatus();
-        updateBadgesAndKeyStatus();
-        initPwaSystem();
+        try {
+            updateOnlineStatus();
+            updateBadgesAndKeyStatus();
+            updatePwaIconPreviews();
+        } catch (e) {
+            console.warn('Initial UI sync error:', e);
+        }
+
+        try {
+            initPwaSubsystem();
+        } catch (e) {
+            console.warn('PWA init error:', e);
+        }
     })();
     </script>
 </body>
