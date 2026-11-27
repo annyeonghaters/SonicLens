@@ -1175,7 +1175,7 @@
                 </button>
                 <button type="button" id="tab-genres" class="nav-tab" data-view="genres">
                     <span>Genres</span>
-                    <span id="tab-genres-badge" class="nav-badge">0/157</span>
+                    <span id="tab-genres-badge" class="nav-badge">0/192</span>
                 </button>
             </div>
         </div>
@@ -1614,14 +1614,14 @@
                 <div class="card-header">
                     <div>
                         <div class="section-title">Pure Musical Genre Directory</div>
-                        <div class="section-subtitle">157 canonical genres (134 granular EDM subgenres) &amp; matched tracks</div>
+                        <div class="section-subtitle">192 granular EDM subgenres &amp; matched tracks</div>
                     </div>
                 </div>
 
                 <div class="grid-3" style="margin-bottom:14px;">
                     <div class="stat-box">
                         <div class="stat-label">Genres Matched</div>
-                        <div id="dir-stat-matched" class="stat-value">0 / 157</div>
+                        <div id="dir-stat-matched" class="stat-value">0 / 192</div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">Analyzed Tracks</div>
@@ -1636,7 +1636,6 @@
                 <div class="btn-row" style="margin-bottom:10px;">
                     <input id="dir-search" class="input" placeholder="Search genre, category, BPM, sonic cue, or track..." style="flex:1 1 220px;">
                     <button type="button" id="dir-toggle-matched" class="btn btn-sm">Filter: All</button>
-                    <button type="button" id="dir-toggle-edm" class="btn btn-sm">Scope: All Genres</button>
                 </div>
 
                 <div id="dir-category-pills" class="scroll-pills"></div>
@@ -1775,7 +1774,7 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
                     <span>Genre Directory</span>
                 </span>
-                <span id="drawer-genres-badge" class="nav-badge">0/157</span>
+                <span id="drawer-genres-badge" class="nav-badge">0/192</span>
             </button>
 
             <button type="button" class="drawer-item" data-drawer-view="history">
@@ -2132,10 +2131,22 @@
         }
 
         // =========================================================
-        // 2. 157-GENRE DEEP-DIVE TAXONOMY (134 EDM + 23 NON-EDM)
+        // 2. 192-GENRE EDM-ONLY DEEP-DIVE TAXONOMY
         // =========================================================
         const GENRE_TAXONOMY = [
-            // --- 1. House & Disco-House (26) ---
+            // --- 1. Acid & 303 Electronic (10) ---
+            { name: 'Acid House', category: 'Acid & 303 Electronic', isEdm: true, bpm: '120–130', cue: 'Squelchy resonant TB-303 acid basslines, raw TR-808/909 drum machine beats' },
+            { name: 'Acid Techno', category: 'Acid & 303 Electronic', isEdm: true, bpm: '132–145', cue: 'Screaming resonant 303 acid lines locked to relentless distorted 4/4 kicks' },
+            { name: 'Acid Trance', category: 'Acid & 303 Electronic', isEdm: true, bpm: '134–144', cue: 'Hypnotic bubbling TB-303 sequences weaving through shimmering trance pads' },
+            { name: 'Acid Breaks', category: 'Acid & 303 Electronic', isEdm: true, bpm: '125–140', cue: 'Syncopated breakbeats driven by squelching resonant 303 basslines' },
+            { name: 'Acid Electro', category: 'Acid & 303 Electronic', isEdm: true, bpm: '125–138', cue: 'Robotic 808 electro patterns paired with liquid twisting 303 synth lines' },
+            { name: 'Acidcore', category: 'Acid & 303 Electronic', isEdm: true, bpm: '155–180', cue: 'Fast warehouse rave kicks colliding with overdriven screaming 303 acid riffs' },
+            { name: 'Acid Bass / Acid Trap', category: 'Acid & 303 Electronic', isEdm: true, bpm: '130–150', cue: 'Modern 808 trap percussion layered with resonant distorted acid synth leads' },
+            { name: 'New Beat / Belgian Acid', category: 'Acid & 303 Electronic', isEdm: true, bpm: '105–118', cue: 'Slow dark pitched-down 80s club grooves with hypnotic acid basslines' },
+            { name: 'Acid Nu-Disco', category: 'Acid & 303 Electronic', isEdm: true, bpm: '116–126', cue: 'Funky disco grooves laced with resonant 303 filter sweeps and analog stabs' },
+            { name: 'Acid Dubstep', category: 'Acid & 303 Electronic', isEdm: true, bpm: '138–145', cue: 'Half-time sub-heavy dubstep drums cut through by squelchy acid 303 modulations' },
+
+            // --- 2. House & Disco-House (32) ---
             { name: 'Deep House', category: 'House & Disco-House', isEdm: true, bpm: '118–125', cue: 'Warm sub-bass, jazzy minor 7th chords, soulful muted 4-on-the-floor groove' },
             { name: 'Tech House', category: 'House & Disco-House', isEdm: true, bpm: '124–130', cue: 'Rolling punchy basslines, crisp minimal percussion, percussive vocal chops' },
             { name: 'Future House', category: 'House & Disco-House', isEdm: true, bpm: '124–128', cue: 'Metallic FM pluck bass drops, bouncy swung hi-hats, bright club synths' },
@@ -2148,32 +2159,44 @@
             { name: 'Big Room House', category: 'House & Disco-House', isEdm: true, bpm: '128–132', cue: 'Sub-heavy booming festival kicks, cavernous reverb leads, minimal drop hooks' },
             { name: 'Melodic House', category: 'House & Disco-House', isEdm: true, bpm: '120–126', cue: 'Arpeggiated analog synths, lush atmospheric pads, hypnotic rolling groove' },
             { name: 'Afro House', category: 'House & Disco-House', isEdm: true, bpm: '118–124', cue: 'Polyrhythmic shakers, congas, earthy organic percussion, hypnotic deep bass' },
+            { name: 'Afro Tech', category: 'House & Disco-House', isEdm: true, bpm: '118–125', cue: 'Dark driving techno-leaning synths fused with hypnotic Afro polyrhythms' },
+            { name: 'Organic House', category: 'House & Disco-House', isEdm: true, bpm: '114–122', cue: 'Warm acoustic instrumentation, hand percussion, breezy meditative house groove' },
             { name: 'Amapiano House', category: 'House & Disco-House', isEdm: true, bpm: '110–116', cue: 'Signature resonant log drum bass, jazzy Rhodes chords, brisk shaker loops' },
             { name: 'Nu-Disco', category: 'House & Disco-House', isEdm: true, bpm: '115–124', cue: 'Funky slap/octave basslines, shimmering rhythm guitars, modern compressed drums' },
             { name: 'French House', category: 'House & Disco-House', isEdm: true, bpm: '120–128', cue: 'Heavy low-pass filter sweeps, phaser-drenched disco loops, pumping sidechain' },
             { name: 'Funky House', category: 'House & Disco-House', isEdm: true, bpm: '122–128', cue: 'Upbeat disco brass/string stabs, bouncy basslines, bright piano chords' },
+            { name: 'Jackin House', category: 'House & Disco-House', isEdm: true, bpm: '122–128', cue: 'Swung filtered funk/disco sample loops, snappy shuffling 909 snares, bouncy groove' },
+            { name: 'Jazz House', category: 'House & Disco-House', isEdm: true, bpm: '118–125', cue: 'Live-feeling sax/trumpet hooks, lush Rhodes jazz chords, warm swung house drums' },
             { name: 'Piano House', category: 'House & Disco-House', isEdm: true, bpm: '122–128', cue: 'Uplifting M1/acoustic house piano chord riffs, soulful diva vocal hooks' },
-            { name: 'Acid House', category: 'House & Disco-House', isEdm: true, bpm: '120–130', cue: 'Squelchy resonant TB-303 acid basslines, raw TR-808/909 drum machine beats' },
             { name: 'Chicago House', category: 'House & Disco-House', isEdm: true, bpm: '118–126', cue: 'Classic raw 909/707 drum grooves, soulful chords, hypnotic repetitive bass' },
             { name: 'Minimal House', category: 'House & Disco-House', isEdm: true, bpm: '122–128', cue: 'Stripped-back micro-percussion, subtle clicks, deep hypnotic sub-grooves' },
             { name: 'Microhouse', category: 'House & Disco-House', isEdm: true, bpm: '120–126', cue: 'Glitchy microscopic sample clicks, clipped hi-hats, warm understated grooves' },
             { name: 'Lo-Fi House', category: 'House & Disco-House', isEdm: true, bpm: '118–126', cue: 'Tape-saturated dusty 909 drums, bitcrushed pads, nostalgic VHS chord warmth' },
+            { name: 'Outsider House', category: 'House & Disco-House', isEdm: true, bpm: '118–128', cue: 'Raw unpolished hardware distortion, gritty tape hiss, hypnotic underground pulse' },
             { name: 'G-House', category: 'House & Disco-House', isEdm: true, bpm: '122–126', cue: 'Deep pitched-down rap vocal loops, dark bouncy sub-bass, crisp house kicks' },
             { name: 'Latin House', category: 'House & Disco-House', isEdm: true, bpm: '122–128', cue: 'Syncopated timbales, brass stabs, montuno piano grooves over 4/4 kicks' },
             { name: 'Vocal House', category: 'House & Disco-House', isEdm: true, bpm: '120–126', cue: 'Prominent soaring lead vocals, lush chord progressions, radio-ready club mix' },
             { name: 'Stutter House', category: 'House & Disco-House', isEdm: true, bpm: '124–130', cue: 'Rapidly gated/chopped 16th-note vocal & synth pads, dreamy euphoric house beat' },
+            { name: 'Indie Dance', category: 'House & Disco-House', isEdm: true, bpm: '116–126', cue: 'Bouncy analog synth basslines blended with post-punk guitar riffs and club kicks' },
+            { name: 'Soft House', category: 'House & Disco-House', isEdm: true, bpm: '112–122', cue: 'Gentle acoustic-electronic blend, warm plucky chords, mellow laid-back 4/4 beat' },
 
-            // --- 2. UK Garage, Club & Breakbeat (19) ---
+            // --- 3. UK Garage, Club & Breakbeat (25) ---
             { name: 'UK Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128–136', cue: 'Shuffling syncopated 2-step hi-hats, chopped vocal snippets, warm sub-bass' },
             { name: '2-Step Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130–136', cue: 'Skipped kick pattern (no 4/4 kick on 2 & 4), crisp rimshots, R&B vocal chops' },
+            { name: '4x4 Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130–136', cue: 'Driving 4-on-the-floor garage kick with bouncy bassline stabs and swung hats' },
+            { name: 'Dark Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '130–138', cue: 'Brooding minor chords, gritty sub-bass pressure, sparse moody 2-step percussion' },
             { name: 'Speed Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '132–138', cue: '4-on-the-floor kick with warped jungle Reese basslines and time-stretched vocals' },
             { name: 'Future Garage', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '125–135', cue: 'Atmospheric reverb-soaked vocal ghosts, vinyl crackle, melancholic 2-step' },
             { name: 'Bassline', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '134–140', cue: 'Heavy warped 4/4 bass wobbles, rapid organ/womp stabs, high-energy club bounce' },
+            { name: 'UK Bass', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '126–136', cue: 'Hybrid UK club sound blending house, garage, and dubstep low-end weight' },
             { name: 'UK Funky', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '126–132', cue: 'Syncopated Afro-Caribbean percussion, tom rolls, bouncy low-end house groove' },
+            { name: 'Broken Beat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '118–132', cue: 'Off-kilter syncopated jazz-funk drum programming, warm Rhodes, deep soulful bass' },
             { name: 'Jersey Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '135–145', cue: 'Signature rapid triplet kick pattern (boom-boom-boom-boom-boom), bed squeaks, vocal chops' },
             { name: 'Baltimore Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128–136', cue: 'Raw staccato chopped breakbeats, shouted repetitive call-and-response vocal loops' },
             { name: 'Philly Club', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '135–145', cue: 'Heavy rapid-fire snare/kick switches, aggressive vocal chants, high-impact drops' },
+            { name: 'Ghetto Tech', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '145–165', cue: 'Fast raw Detroit electro-booty beats, rapid 808s, cheeky repetitive vocal chops' },
             { name: 'Miami Bass', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '125–138', cue: 'Booming sustained TR-808 sub-bass hits, electro claps, brisk party rhythm' },
+            { name: 'Singeli', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '180–240', cue: 'Hyper-fast Tanzanian electronic percussion loops, frantic synths, rapid-fire vocals' },
             { name: 'Breakbeat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '120–138', cue: 'Syncopated sampled drum breaks, funky basslines, non-4/4 rhythmic drive' },
             { name: 'Nu-Skool Breaks', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '128–138', cue: 'Crisp quantized electronic breakbeats, dark techy synth stabs, heavy sub' },
             { name: 'Big Beat', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '115–135', cue: 'Crunchy compressed rock-style breakbeats, acid 303 riffs, distorted synth hooks' },
@@ -2184,28 +2207,42 @@
             { name: 'Juke', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '155–165', cue: 'Fast 160 BPM ghetto-house pulse, raw 808s, repetitive rhythmic vocal chants' },
             { name: 'Grime Instrumental', category: 'UK Garage, Club & Breakbeat', isEdm: true, bpm: '138–142', cue: 'Sparse icy square-wave/eski leads, sharp snare hits, jagged 140 BPM sub-bass' },
 
-            // --- 3. Drum & Bass & Jungle (12) ---
+            // --- 4. Drum & Bass & Jungle (18) ---
             { name: 'Liquid Drum & Bass', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–176', cue: 'Smooth rolling fast breakbeats, lush soulful pads, warm melodic sub-bass' },
             { name: 'Neurofunk', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–176', cue: 'Hyper-modulated distorted Reese basslines, surgical technical snares, sci-fi tone' },
             { name: 'Jump-Up DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–176', cue: 'Bouncy screechy metallic wobble bass riffs, punchy simple two-step DnB drums' },
             { name: 'Dancefloor DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–176', cue: 'Anthemic supersaw chords, soaring pop-ready vocals, massive crisp DnB drops' },
+            { name: 'Rollers', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–176', cue: 'Locked hypnotic foghorn/sub-bass grooves, tight rolling drums, club momentum' },
+            { name: 'Deep DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–175', cue: 'Submerged sub-bass pressure, minimal moody atmospheres, surgical percussion' },
             { name: 'Jungle', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '160–174', cue: 'Complex chopped Amen/Think breakbeats, dub reggae sub-bass, pitched vocal samples' },
             { name: 'Ragga Jungle', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '165–175', cue: 'Dancehall/reggae vocal toasting over frantic sliced vintage jungle breakbeats' },
             { name: 'Techstep', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–176', cue: 'Dark industrial sci-fi textures, cold stepped drums, menacing filtered bass' },
             { name: 'Darkstep', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–180', cue: 'Aggressive horror-tinged distortion, heavy skullstep snares, chaotic bass' },
+            { name: 'Crossbreed', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–185', cue: 'Brutal fusion of distorted hardcore gabber kicks and fast DnB breakbeats' },
+            { name: 'Breakcore', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–220', cue: 'Hyper-chopped chaotic Amen breaks, rapid glitch edits, aggressive genre-mashing' },
+            { name: 'Clownstep', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '172–176', cue: 'Playful swung bouncy synth-bass riffs with quirky carnival-like jump-up hooks' },
+            { name: 'Sambass', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–176', cue: 'Brazilian samba/bossa nova percussion and warm guitars over liquid DnB breaks' },
             { name: 'Halftime DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '85–90 / 172', cue: 'Half-speed snare on beat 3 over 172 BPM hi-hat subdivisions and massive sub-bass' },
             { name: 'Drumfunk', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '165–175', cue: 'Virtuosic live-edited acoustic funk drum breaks taking center stage over minimal sub' },
             { name: 'Atmospheric DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '165–174', cue: 'Dreamy ethereal 90s ambient synth washes, floating pads, crisp rolling breaks' },
             { name: 'Minimal DnB', category: 'Drum & Bass & Jungle', isEdm: true, bpm: '170–175', cue: 'Sparse clicky precision percussion, cavernous space, deep subtle rolling sub' },
 
-            // --- 4. Bass, Dubstep & EDM Trap (16) ---
+            // --- 5. Bass, Dubstep & EDM Trap (24) ---
             { name: 'Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '138–145', cue: 'Half-time snare on beat 3, heavy LFO-modulated sub-bass wobbles, dark space' },
             { name: 'Brostep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–150', cue: 'Aggressive mid-range metallic FM screeches, robotic growls, explosive half-time drops' },
             { name: 'Riddim', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–150', cue: 'Repetitive swung quarter-note metallic/square bass chugs, minimal clap-snare rhythm' },
+            { name: 'Future Riddim', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–150', cue: 'Melodic sparkling chords and lush vocal chops fused with bouncy riddim flow' },
             { name: 'Melodic Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–150', cue: 'Massive emotional sidechained supersaw chords, soaring vocals, half-time bass drops' },
             { name: 'Deep Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '138–142', cue: 'Sub-bass weight focused below 80 Hz, dub delays, sparse meditative percussion' },
             { name: 'Color Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–155', cue: 'Vocoded/resonator-harmonized dubstep growls turned into shimmering melodic chords' },
             { name: 'Tearout Dubstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '145–155', cue: 'Ultra-aggressive staccato machine-gun bass hits, distorted metallic clangs' },
+            { name: 'Deathstep', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–155', cue: 'Extreme metal-inspired orchestral choirs, guttural distorted basses, heavy slams' },
+            { name: 'Minatory', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–155', cue: 'Dark noise-drenched sub-bass walls, oppressive distorted horror atmospheres' },
+            { name: 'Space Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '80–110 / 140', cue: 'Psychedelic alien squelches, wonky off-grid sub-bass, trippy experimental drops' },
+            { name: 'Freeform Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '90–150', cue: 'Genre-bending psychedelic bass music with unpredictable rhythm and lush sound design' },
+            { name: 'Leftfield Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '100–145', cue: 'Unconventional textured basslines, weird foley percussion, hypnotic underground groove' },
+            { name: 'Experimental Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '85–150', cue: 'Avant-garde granular synthesis, heavy sub-pressure, fractured non-standard drops' },
+            { name: 'Complextro', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '126–132', cue: 'Rapid-fire mosaic of hyper-chopped electro/dubstep synth patches switching every beat' },
             { name: 'EDM Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '135–155', cue: 'Festival risers into rattling 808 hi-hat rolls, booming sub glides, brass/synth leads' },
             { name: 'Hybrid Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–155', cue: 'Trap 808 drum bounce fused with metallic dubstep bass fills and screech stabs' },
             { name: 'Festival Trap', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '140–155', cue: 'Big-room horn/lead anthems dropping into massive 808 trap percussion and chants' },
@@ -2216,31 +2253,43 @@
             { name: 'Midtempo Bass', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '95–112', cue: 'Slow menacing cyberpunk 4/4 stomp, heavily distorted industrial saw basslines' },
             { name: 'Glitch Hop', category: 'Bass, Dubstep & EDM Trap', isEdm: true, bpm: '100–115', cue: 'Swung funky hip-hop tempo with hyper-edited stuttering neuro bass and glitch cuts' },
 
-            // --- 5. Techno & Industrial (14) ---
+            // --- 6. Techno & Industrial (20) ---
             { name: 'Peak-Time Techno', category: 'Techno & Industrial', isEdm: true, bpm: '130–138', cue: 'Massive pounding kick + rumble sub, dramatic rave stabs, driving club energy' },
+            { name: 'Driving Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132–142', cue: 'Relentless forward-pushing 16th-note rolling basslines and tight crisp percussion' },
             { name: 'Melodic Techno', category: 'Techno & Industrial', isEdm: true, bpm: '122–128', cue: 'Hypnotic arpeggiated analog synth leads, dark emotional pads, rolling 4/4 bass' },
-            { name: 'Acid Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132–145', cue: 'Squelchy screaming resonant 303 acid lines locked to relentless distorted kicks' },
+            { name: 'Hardgroove', category: 'Techno & Industrial', isEdm: true, bpm: '136–146', cue: 'Funky tribal-looped percussive techno grooves, swinging shakers, warm punchy kicks' },
             { name: 'Hard Techno', category: 'Techno & Industrial', isEdm: true, bpm: '142–158', cue: 'Blistering distorted industrial kicks, metallic clangs, relentless warehouse pace' },
+            { name: 'Neorave', category: 'Techno & Industrial', isEdm: true, bpm: '145–160', cue: 'Modern high-speed rave stabs, euphoric 90s trance hooks over brutal hard techno kicks' },
+            { name: 'Rave Techno', category: 'Techno & Industrial', isEdm: true, bpm: '138–152', cue: 'Classic hoover/mentasm stabs, acid riffs, warehouse sirens, high-energy 4/4 stomp' },
             { name: 'Industrial Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132–148', cue: 'Harsh noisy metallic percussion, cavernous reverb, dystopian distorted textures' },
+            { name: 'Industrial Hardcore', category: 'Techno & Industrial', isEdm: true, bpm: '155–185', cue: 'Crushing industrial distortion, mechanical percussion, dark relentless hardcore kicks' },
             { name: 'Minimal Techno', category: 'Techno & Industrial', isEdm: true, bpm: '124–132', cue: 'Stripped hypnotic bleeps, subtle micro-modulations, tight clicky 4/4 pulse' },
+            { name: 'Minimal Dub', category: 'Techno & Industrial', isEdm: true, bpm: '118–126', cue: 'Sparse dub-delayed clicks and warm echoing chord stabs over deep minimal sub' },
             { name: 'Detroit Techno', category: 'Techno & Industrial', isEdm: true, bpm: '125–135', cue: 'Soulful futuristic synth strings, funky analog basslines, classic 909 rhythm' },
             { name: 'Dub Techno', category: 'Techno & Industrial', isEdm: true, bpm: '116–124', cue: 'Tape-delayed minor chord stabs echoing over deep hypnotic sub-bass and soft hiss' },
             { name: 'Hypnotic Techno', category: 'Techno & Industrial', isEdm: true, bpm: '130–140', cue: 'Repetitive evolving modular polyrhythms, relentless locked groove, subtle tension' },
+            { name: 'Psy-Techno', category: 'Techno & Industrial', isEdm: true, bpm: '128–138', cue: 'Dark hypnotic techno grooves laced with psychedelic FM squelches and trippy bass' },
             { name: 'Schranz', category: 'Techno & Industrial', isEdm: true, bpm: '148–162', cue: 'Hyper-compressed filtered percussive loops, ferocious distorted 4/4 kick stomp' },
             { name: 'Dark Techno', category: 'Techno & Industrial', isEdm: true, bpm: '126–136', cue: 'Brooding minor atmospheres, sinister rumble bass, eerie sparse synth drones' },
             { name: 'Raw Techno', category: 'Techno & Industrial', isEdm: true, bpm: '132–142', cue: 'Unpolished hardware-driven saturation, punchy gritty 909 percussion, minimal fluff' },
             { name: 'EBM / Dark Electro', category: 'Techno & Industrial', isEdm: true, bpm: '115–132', cue: 'Sequenced 16th-note analog basslines, marching industrial snares, cold vocal grit' },
             { name: 'Electroclash', category: 'Techno & Industrial', isEdm: true, bpm: '122–134', cue: '80s new-wave synth riffs collided with raw electro-techno beats and punk attitude' },
 
-            // --- 6. Trance & Euro-Dance (14) ---
+            // --- 7. Trance & Euro-Dance (20) ---
             { name: 'Uplifting Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '136–142', cue: 'Euphoric rolling 16th-note basslines, emotional piano breakdowns, soaring supersaws' },
             { name: 'Progressive Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '126–134', cue: 'Smooth gradual builds, warm plucky chord progressions, deep rolling basslines' },
+            { name: 'Balearic Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '128–136', cue: 'Sun-drenched acoustic guitar plucks, warm Mediterranean pads, euphoric rolling beats' },
+            { name: 'Neo-Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '124–138', cue: 'Modern minimal-techno crossover with shimmering nostalgic arpeggiated trance leads' },
             { name: 'Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '138–146', cue: 'Relentless galloping 16th-note K-B-B-B bassline, psychedelic FM zaps and squelches' },
+            { name: 'Full-On Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '140–148', cue: 'High-energy melodic rolling psy basslines, uplifting psychedelic synth hooks' },
+            { name: 'Progressive Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '134–140', cue: 'Deep hypnotic bouncy offbeat/rolling psy bass, spacious groove, clean psychedelic leads' },
+            { name: 'Dark Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '146–160', cue: 'Fast eerie nocturnal atmospheres, twisted FM leads, relentless pounding bass' },
+            { name: 'Forest Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '144–154', cue: 'Organic squelchy woodland textures, deep hypnotic bubbling synths, murky groove' },
+            { name: 'Hi-Tech Psytrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '170–210', cue: 'Blistering hyper-speed glitchy FM zaps, laser synth bursts, frantic psy basslines' },
             { name: 'Goa Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '136–148', cue: 'Hypnotic eastern-scale 303 arpeggios, swirling analog synth layers, spiritual energy' },
             { name: 'Vocal Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '128–138', cue: 'Ethereal reverb-soaked lead vocals, lush emotional pads, euphoric anthem drops' },
             { name: 'Tech Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '136–142', cue: 'Driving techno percussion and gritty stabs fused with high-energy trance breakdowns' },
             { name: 'Hard Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '140–150', cue: 'Reverse-bass offbeat thump, screechy acid leads, pounding 90s/00s rave energy' },
-            { name: 'Acid Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '134–144', cue: 'Hypnotic bubbling TB-303 sequences weaving through shimmering trance pads' },
             { name: 'Eurodance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '128–142', cue: 'Catchy 90s octave basslines, bright synth riffs, soaring chorus hooks & rap verses' },
             { name: 'Eurotrance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '136–145', cue: 'Bouncy offbeat bass, bright pitched-up vocals, fast nostalgic rave synth melodies' },
             { name: 'Hands Up', category: 'Trance & Euro-Dance', isEdm: true, bpm: '140–148', cue: 'Punchy offbeat pumping bass, cheesy euphoric supersaw hooks, crisp clap builds' },
@@ -2248,29 +2297,39 @@
             { name: 'Eurobeat', category: 'Trance & Euro-Dance', isEdm: true, bpm: '150–165', cue: 'Blistering octave synth-brass riffs, dramatic guitar fills, high-octane arcade energy' },
             { name: 'Dream Trance', category: 'Trance & Euro-Dance', isEdm: true, bpm: '130–138', cue: 'Iconic dreamy piano melodies, airy atmospheric pads, soft rolling 90s trance beat' },
 
-            // --- 7. Hard Dance, Hardcore & Hyperpop (15) ---
+            // --- 8. Hard Dance, Hardcore & Hyperpop (21) ---
             { name: 'Hardstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '148–155', cue: 'Distorted tonal reverse-bass/pitched tok kicks paired with huge euphoric melodies' },
+            { name: 'Reverse Bass Hardstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '148–154', cue: 'Classic early-hardstyle booming offbeat reverse-bass tail after every punchy kick' },
             { name: 'Euphoric Hardstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '150–155', cue: 'Anthemic emotional supersaw chord melodies over pitched hardstyle kicks' },
             { name: 'Rawstyle', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '150–160', cue: 'Ultra-aggressive gated/zaag kicks, dark screeches, brutal rhythmic kick-switches' },
             { name: 'Hardcore / Gabber', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '165–190', cue: 'Relentless heavily overdriven 909 distortion kicks, manic hoover synth riffs' },
             { name: 'Happy Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '165–175', cue: 'Joyful pitched-up vocals, bright rave piano stabs, bouncing offbeat hardcore bass' },
             { name: 'UK Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '168–178', cue: 'Clean modern trance-influenced euphoric leads over rapid 170+ BPM rave kicks' },
+            { name: 'Makina', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '165–180', cue: 'Spanish high-speed rave offbeat basslines, bright melodic synth hooks, punchy kicks' },
+            { name: 'Hardtek / Tribecore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '175–195', cue: 'Bouncy underground free-party kicks, tribal percussive loops, acid/rave synth stabs' },
             { name: 'Frenchcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '190–215', cue: 'Bouncy offbeat distorted kicks at 200 BPM with playful classical or folk melodies' },
             { name: 'Uptempo Hardcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '195–220', cue: 'Extreme piep/zaag distorted kicks, relentless blistering tempo, chaotic drops' },
+            { name: 'Terrorcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '200–250', cue: 'Brutal horror-sample atmospheres, relentlessly distorted high-speed industrial kicks' },
+            { name: 'Speedcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '250–350+', cue: 'Extreme hyper-speed distorted kick streams blurring into tonal buzzes and chaos' },
             { name: 'Hardbass', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '145–155', cue: 'Signature hollow offbeat metallic "donk" bass, punchy kick, bouncy rave chant' },
             { name: 'Donk / Scouse House', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '142–154', cue: 'Prominent percussive FM pipe-donk offbeat bass with upbeat pitched vocal hooks' },
             { name: 'Hyperpop', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '130–175', cue: 'Maximalist pitch-shifted autotuned vocals, blown-out 808s, glittery chaotic synths' },
+            { name: 'Glitchcore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '135–175', cue: 'Stuttering bitcrushed vocal chops, erratic hyperpop drum cuts, clipped 808 blasts' },
             { name: 'Bubblegum Bass', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '125–160', cue: 'Plastic shiny metallic sound design, bouncy pop hooks, glossy PC Music synths' },
             { name: 'Dariacore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '155–185', cue: 'Hyper-chopped pop mashups, frantic breakbeats, blown-out Jersey/dubstep bass' },
             { name: 'Digicore', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '135–165', cue: 'Bitcrushed shimmering synth arps, emotional autotuned rap-singing, clipped 808s' },
             { name: 'Nightcore-Style Dance', category: 'Hard Dance, Hardcore & Hyperpop', isEdm: true, bpm: '160–185', cue: 'High-speed tempo and pitched-up bright vocals over driving Eurotrance/Hands Up beats' },
 
-            // --- 8. Synth, Retro & Global Club (18) ---
+            // --- 9. Synth, Retro & Global Club (22) ---
             { name: 'Synthwave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '95–120', cue: 'Gated-reverb 80s snares, driving analog arpeggiated bass, nostalgic neon synth leads' },
             { name: 'Retrowave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '100–124', cue: 'Warm cassette-style 80s pads, bright FM bell melodies, glossy retro drum machines' },
             { name: 'Darksynth', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '105–135', cue: 'Heavy distorted horror/cyberpunk synth riffs, aggressive industrial drums, dark bass' },
             { name: 'Outrun', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '112–132', cue: 'High-speed nocturnal driving basslines, soaring 80s synth-guitar solos, punchy toms' },
             { name: 'Chillsynth', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '85–108', cue: 'Dreamy lo-fi analog pads, gentle soft synthwave drums, warm sunset nostalgia' },
+            { name: 'Chillwave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '85–115', cue: 'Sun-bleached hazy vintage synths, heavy tape wobble, dreamy reverb-soaked vocals' },
+            { name: 'Darkwave', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '105–132', cue: 'Cold moody 80s goth synths, melancholic baritone/ethereal vocals, crisp drum machines' },
+            { name: 'Witch House', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '65–90 / 135', cue: 'Slowed occult trap percussion, detuned hoover/saw synths, cavernous dark reverb' },
+            { name: 'Chiptune / Bitpop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '115–165', cue: '8-bit/16-bit retro video game pulse waves, rapid chip arpeggios, crisp electronic drums' },
             { name: 'Electropop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '110–130', cue: 'Polished hook-driven pop vocals over crisp electronic drum machines and synth bass' },
             { name: 'Synth-Pop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '108–132', cue: 'Catchy melodic analog/digital synthesizer hooks as primary instrumentation' },
             { name: 'Dance-Pop', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '116–130', cue: 'Radio-friendly 4-on-the-floor pop chorus structure with sleek club-ready synths' },
@@ -2283,36 +2342,7 @@
             { name: 'Kuduro', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '130–142', cue: 'High-energy Angolan club percussion, staccato synth stabs, rapid rhythmic chants' },
             { name: 'Gqom', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '122–128', cue: 'Dark hypnotic South African broken-beat drums, ominous drones, heavy tom kicks' },
             { name: 'Deconstructed Club', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '115–155', cue: 'Avant-garde fractured rhythms, glass/metal foley impacts, dramatic cinematic drops' },
-            { name: 'IDM / Braindance', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '90–160', cue: 'Intricate non-standard programmed percussion, experimental modular synths, complex melody' },
-
-            // --- 9. R&B, Soul & Funk (8) ---
-            { name: 'Contemporary R&B', category: 'R&B, Soul & Funk', isEdm: false, bpm: '70–105', cue: 'Smooth vocal runs, lush electric piano chords, crisp modern trap-influenced drums' },
-            { name: 'Alternative R&B', category: 'R&B, Soul & Funk', isEdm: false, bpm: '72–110', cue: 'Moody ambient synths, unconventional song structures, introspective falsetto vocals' },
-            { name: 'Neo-Soul', category: 'R&B, Soul & Funk', isEdm: false, bpm: '75–98', cue: 'Laid-back swung pocket drums, warm Rhodes/organ jazz chords, rich live bass' },
-            { name: 'New Jack Swing', category: 'R&B, Soul & Funk', isEdm: false, bpm: '102–116', cue: 'Hard swung 16th-note SP-1200/hip-hop drums, orchestra hits, brassy R&B hooks' },
-            { name: 'Funk', category: 'R&B, Soul & Funk', isEdm: false, bpm: '100–120', cue: 'Syncopated slap bass on the one, percussive clean guitar chops, tight horn stabs' },
-            { name: 'Electro-Funk', category: 'R&B, Soul & Funk', isEdm: false, bpm: '108–122', cue: 'Rubber-band synth basslines, talkbox/vocoder leads, crisp 80s drum machines' },
-            { name: 'Disco', category: 'R&B, Soul & Funk', isEdm: false, bpm: '114–126', cue: 'Driving 4/4 kick with open offbeat hi-hats, lush string sweeps, octave basslines' },
-            { name: 'City Pop', category: 'R&B, Soul & Funk', isEdm: false, bpm: '100–122', cue: 'Glossy 80s boogie-funk bass, jazzy major 7th chords, bright brass and electric piano' },
-
-            // --- 10. Hip-Hop & Rap (7) ---
-            { name: 'Trap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '125–155', cue: 'Deep sustained 808 bass glides, rapid triplet hi-hat rolls, dark minimal synth loops' },
-            { name: 'Boom Bap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '84–98', cue: 'Hard acoustic kick and snappy snare on 2 & 4, dusty chopped jazz/soul samples' },
-            { name: 'Drill', category: 'Hip-Hop & Rap', isEdm: false, bpm: '138–146', cue: 'Sliding gliding 808 bass, syncopated 3-3-2 hi-hat counter-rhythms, dark piano' },
-            { name: 'Pop Rap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '90–130', cue: 'Melodic hook-focused choruses paired with rhythmic rap verses and polished beats' },
-            { name: 'Cloud Rap', category: 'Hip-Hop & Rap', isEdm: false, bpm: '110–135', cue: 'Hazy ethereal reverb-drenched synth pads, dreamy atmospheric loops, soft 808s' },
-            { name: 'Rage', category: 'Hip-Hop & Rap', isEdm: false, bpm: '135–155', cue: 'Buzzing futuristic EDM-inspired saw synth loops over clipped aggressive trap 808s' },
-            { name: 'West Coast Hip-Hop', category: 'Hip-Hop & Rap', isEdm: false, bpm: '90–106', cue: 'Bouncy funky synth bass, high-pitched whining portamento G-funk leads, crisp claps' },
-
-            // --- 11. Pop, Rock & Global Rhythms (8) ---
-            { name: 'Bubblegum Pop', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '115–135', cue: 'Bright major-key earworm hooks, energetic handclaps, ultra-polished upbeat production' },
-            { name: 'Teen Pop', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '105–128', cue: 'Chant-driven choruses, layered vocal harmonies, slick dance-ready pop rhythms' },
-            { name: 'Pop Rock', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '110–145', cue: 'Crunchy electric power chords, live driving drum kit, bright catchy pop melodies' },
-            { name: 'Pop Punk', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '150–185', cue: 'Fast palm-muted distorted guitars, rapid punk snare beats, anthemic youthful choruses' },
-            { name: 'Indie Pop', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '100–130', cue: 'Jangly guitars, quirky vintage synths, intimate natural vocal production' },
-            { name: 'Reggaeton', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '88–102', cue: 'Iconic dembow rhythm (boom-ch-boom-chick), punchy sub-bass, rhythmic vocal flow' },
-            { name: 'Afrobeats', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '98–116', cue: 'Syncopated log/rimshot groove, warm melodic guitar/synth plucks, relaxed dance sway' },
-            { name: 'Dancehall', category: 'Pop, Rock & Global Rhythms', isEdm: false, bpm: '92–112', cue: 'Syncopated digital riddim bass & snare bounce, percussive rhythmic vocal delivery' }
+            { name: 'IDM / Braindance', category: 'Synth, Retro & Global Club', isEdm: true, bpm: '90–160', cue: 'Intricate non-standard programmed percussion, experimental modular synths, complex melody' }
         ];
 
         const BANNED_REGIONAL_REGEX = /^(k[\s-]?pop|j[\s-]?pop|c[\s-]?pop|mando[\s-]?pop|canto[\s-]?pop|p[\s-]?pop|t[\s-]?pop|v[\s-]?pop|korean\s+pop|japanese\s+pop|chinese\s+pop|hallyu|idol\s+pop|asian\s+pop)$/i;
@@ -3428,7 +3458,7 @@
                 'You are SonicLens, an expert musicologist and electronic dance music (EDM) production analyst.',
                 'CRITICAL PURE MUSICAL ANALYSIS RULE: Classify tracks STRICTLY by concrete musical, rhythmic, harmonic, sound-design, and production elements.',
                 'STRICTLY PROHIBITED LABELS: NEVER output "K-pop", "J-pop", "C-pop", "Mandopop", "Cantopop", "P-pop", "T-pop", "V-pop", "Korean Pop", "Japanese Pop", or any language/regional/industry umbrella tag. Ignore vocal language completely.',
-                'Pay special attention to dissecting electronic-influenced pop tracks for granular EDM subgenres (e.g., UK Garage, Jersey Club, Future House, Bass House, Slap House, Drum & Bass, Hyperpop, Baile Funk, Synthwave, Hardstyle, Future Bass, Electro House, etc.) and mid-clip genre/drop shifts.',
+                'Pay special attention to dissecting electronic-influenced tracks for granular EDM subgenres (e.g., Acid House/Techno/Trance TB-303 squelch lines, UK Garage, Jersey Club, Future House, Bass House, Slap House, Afro Tech, Hardgroove, Color Bass, Space Bass, Drum & Bass, Hyperpop, Baile Funk, Synthwave, Hardstyle, Future Bass, etc.) and mid-clip genre/drop shifts.',
                 `Prefer standardized names from this canonical taxonomy where accurate: ${canonicalList}.`,
                 buildLearningCalibrationBlock()
             ].join('\n');
@@ -4120,7 +4150,7 @@
         });
 
         // =========================================================
-        // 15. GENRE DIRECTORY VIEW (157 CANONICAL + OTHER DISCOVERED)
+        // 15. GENRE DIRECTORY VIEW (192 EDM CANONICAL + OTHER DISCOVERED)
         // =========================================================
         function computeMatchedGenreMap() {
             const map = {};
@@ -4397,7 +4427,7 @@
 
         function buildSwJsString() {
             return [
-                "const CACHE_NAME = 'soniclens-v5';",
+                "const CACHE_NAME = 'soniclens-v6';",
                 "const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];",
                 "",
                 "self.addEventListener('install', (event) => {",
@@ -4536,7 +4566,7 @@
         });
         on('btn-dl-sw', 'click', () => {
             downloadBlob(new Blob([buildSwJsString()], { type: 'application/javascript' }), 'sw.js');
-            showToast('Downloaded sw.js (soniclens-v5)');
+            showToast('Downloaded sw.js (soniclens-v6)');
         });
         on('btn-dl-icon-192', 'click', () => {
             generateIconCanvas(192).toBlob((b) => {
