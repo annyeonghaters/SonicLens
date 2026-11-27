@@ -3549,9 +3549,12 @@
                 state.currentAi = data;
 
                 setPipelineStep(5, 'active', 'Rendering & saving report...');
+                const wasOverridden = upsertCurrentTrackToHistory(true);
                 renderAiResults(data);
-                upsertCurrentTrackToHistory();
-                setPipelineStep(5, 'done', 'Analysis complete');
+                setPipelineStep(5, 'done', wasOverridden ? 'Analysis updated (overrode previous entry)' : 'Analysis complete');
+                if (wasOverridden) {
+                    showToast(`Updated existing History entry for "${state.currentTrackTitle}"`);
+                }
             } catch (err) {
                 setPipelineStep(4, 'error', 'AI request failed');
                 showErrorBanner('Gemini AI Analysis Failed', err.message || String(err));
@@ -3826,7 +3829,7 @@
             saveLearningMemory(state.learning);
 
             renderAiResults(state.currentAi);
-            upsertCurrentTrackToHistory();
+            upsertCurrentTrackToHistory(false);
             updateBadgesAndKeyStatus();
             showToast(`Added "${finalName}" to track results`);
         }
@@ -3975,21 +3978,42 @@
         // =========================================================
         // 14. HISTORY VIEW (AUTO-SAVE, SEARCH, RENAME, EXPORT/IMPORT)
         // =========================================================
-        function upsertCurrentTrackToHistory() {
-            if (!state.currentTrackId || !state.currentAi) return;
+        function upsertCurrentTrackToHistory(isNewAnalysisRun = false) {
+            if (!state.currentTrackId || !state.currentAi) return false;
+
+            const normTitle = (state.currentTrackTitle || '').trim().toLowerCase();
+            const isMic = normTitle.startsWith('mic capture (');
+
+            const idx = state.history.findIndex((h) =>
+                h.id === state.currentTrackId ||
+                (!isMic && normTitle && (h.title || '').trim().toLowerCase() === normTitle)
+            );
+
+            const existing = idx >= 0 ? state.history[idx] : null;
+            if (existing) {
+                state.currentTrackId = existing.id; // Keep existing ratings & votes linked
+            }
+
+            const prevRuns = existing ? (Number(existing.runCount) || 1) : 0;
+            const runCount = isNewAnalysisRun ? (prevRuns + 1) : (prevRuns || 1);
+
             const record = {
                 id: state.currentTrackId,
                 title: state.currentTrackTitle,
                 sourceLabel: state.currentSourceLabel,
                 timestamp: Date.now(),
+                runCount,
                 dsp: state.currentDsp,
                 ai: state.currentAi
             };
-            const idx = state.history.findIndex((h) => h.id === record.id);
-            if (idx >= 0) state.history[idx] = record;
-            else state.history.unshift(record);
+
+            if (idx >= 0) {
+                state.history.splice(idx, 1);
+            }
+            state.history.unshift(record);
             saveHistory(state.history);
             updateBadgesAndKeyStatus();
+            return Boolean(existing && isNewAnalysisRun);
         }
 
         function openSavedReport(trackId) {
@@ -4049,13 +4073,14 @@
                 const topMain = (h.ai?.main_genres || []).slice(0, 3).map((g) => `<span class="pill pill-indigo">${escapeHtml(g.name)} ${g.confidence}%</span>`).join('');
                 const topEdm = (h.ai?.edm_analysis?.subgenres || []).slice(0, 2).map((s) => `<span class="pill pill-purple">${escapeHtml(s.name)}</span>`).join('');
                 const edmPct = h.ai?.edm_analysis?.edm_influence_pct ?? 0;
+                const runBadge = (h.runCount && h.runCount > 1) ? ` • Updated (${h.runCount}x)` : '';
                 return `
                     <div class="history-item">
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px;">
                             <div style="flex:1 1 200px; min-width:0;">
                                 <input class="input" data-rename-id="${escapeHtml(h.id)}" value="${escapeHtml(h.title)}" aria-label="Track title" style="min-height:36px; padding:6px 10px; font-weight:700;">
                                 <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">
-                                    ${new Date(h.timestamp).toLocaleString()} • EDM Influence: ${edmPct}%${h.dsp ? ` • ${h.dsp.bpm} BPM` : ''}
+                                    ${new Date(h.timestamp).toLocaleString()} • EDM Influence: ${edmPct}%${h.dsp ? ` • ${h.dsp.bpm} BPM` : ''}${runBadge}
                                 </div>
                             </div>
                             <div class="btn-row">
@@ -4427,7 +4452,7 @@
 
         function buildSwJsString() {
             return [
-                "const CACHE_NAME = 'soniclens-v6';",
+                "const CACHE_NAME = 'soniclens-v7';",
                 "const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];",
                 "",
                 "self.addEventListener('install', (event) => {",
@@ -4566,7 +4591,7 @@
         });
         on('btn-dl-sw', 'click', () => {
             downloadBlob(new Blob([buildSwJsString()], { type: 'application/javascript' }), 'sw.js');
-            showToast('Downloaded sw.js (soniclens-v6)');
+            showToast('Downloaded sw.js (soniclens-v7)');
         });
         on('btn-dl-icon-192', 'click', () => {
             generateIconCanvas(192).toBlob((b) => {
